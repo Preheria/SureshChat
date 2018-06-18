@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "432112208573",
+    "firebase_url": "https://cpproject-62791.firebaseio.com",
+    "project_id": "cpproject-62791",
+    "storage_bucket": "cpproject-62791.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432112208573:android:c7bd94b49c4027e1",
+        "android_client_info": {
+          "package_name": "com.example.suresh.mychattapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432112208573-kv68cilskbe0e0u1568iq03ekheog60h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.suresh.mychattapplication",
+            "certificate_hash": "73c5a971bebd31131467052c1e7a2a1eab0eed32"
+          }
+        },
+        {
+          "client_id": "432112208573-s3dl4k3cjdreouuppi92v7oqfuh8f6m3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "432112208573-s3dl4k3cjdreouuppi92v7oqfuh8f6m3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVDasLOuVa_R99r7OdWkylX4hm_IaG8vw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432112208573-s3dl4k3cjdreouuppi92v7oqfuh8f6m3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
