@@ -13,14 +13,25 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+
     <string name="address">address</string>
 
     <string name="selectPrompt">Country List</string>
     <string name="selectPrompt_month">Select Month</string>
     <string name="selectPrompt_year">Select Year</string>
     <string name="selectPrompt_day">Select Day</string>
+    <string name="personal_details">personal details</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="yy">yy :</string>
+    <string name="mm">mm :</string>
+    <string name="dd">dd :</string>
+    <string name="addressDetails">Address</string>
+    <string name="state">State</string>
+    <string name="street_and_blcok_address">Street and blcok address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="next">Next</string>
 
     <string-array name="monthList">
         <item>JAN</item>
