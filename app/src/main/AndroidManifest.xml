@@ -15,24 +15,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name=".Views.LoginActivity"
+            android:name=".Controllers.LoginActivity"
             android:label="@string/app_name" />
+        <activity android:name=".Controllers.RegistrationPart1"></activity>
 
-        <activity android:name=".Views.RegistrationPart1">
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".Controllers.RegistrationPart2" />
+        <activity
+            android:name=".Controllers.MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
-        <activity android:name=".Views.RegistrationPart2" />
+        <activity android:name=".Controllers.HomePage"></activity>
     </application>
 
 </manifest>

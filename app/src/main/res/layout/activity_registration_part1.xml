@@ -5,10 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Views.RegistrationPart1"
+    tools:context=".Controllers.RegistrationPart1"
+    android:background="@color/white"
     >
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:theme="@style/progressBar"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+
     <ScrollView
+        android:id="@+id/registrationForm1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical">
@@ -30,6 +44,7 @@
                 android:textStyle="bold"
                 android:layout_marginTop="25dp"/>
 
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,7 +53,8 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 >
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/first_name"
@@ -59,7 +75,9 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 >
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+
+
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/last_name"
@@ -168,7 +186,7 @@
                 android:paddingRight="20dp"
                 >
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/state"
@@ -189,7 +207,7 @@
                 android:paddingRight="20dp"
                 >
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/street_and_blcok_address"
@@ -211,7 +229,7 @@
                 android:paddingRight="20dp"
                 >
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/phone_number"
@@ -233,8 +251,8 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"
                 />
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

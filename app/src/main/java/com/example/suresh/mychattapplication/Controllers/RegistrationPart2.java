@@ -1,28 +1,37 @@
-package com.example.suresh.mychattapplication.Views;
+package com.example.suresh.mychattapplication.Controllers;
 
-import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.suresh.mychattapplication.Models.FirebaseDAO;
+import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
 
-public class RegistrationPart2 extends AppCompatActivity implements View.OnClickListener,ActivityHelper{
+import java.util.HashMap;
 
-    private Intent receivedIntent;
-    private Bundle receivedDataBundle;
+public class RegistrationPart2 extends AppCompatActivity implements View.OnClickListener,CommonActivity {
 
-    private AutoCompleteTextView txtEmail;
-    private AutoCompleteTextView txtUsername;
-    private AutoCompleteTextView txtPassword1;
-    private AutoCompleteTextView txtPassword2;
+
+    private User user;
+    private FirebaseDAO firebaseDAO;
+    private ProgressBar progressBar;
+    private TextInputEditText txtEmail;
+    private TextInputEditText txtUsername;
+    private TextInputEditText txtPassword1;
+    private TextInputEditText txtPassword2;
     private CheckBox chkBox1;
+
+    //hashmap for storing user registration data from previous activity
+    private HashMap<String ,String> userSignupData;
     private Button btnSignup;
+
 
     @Override
     public void initializeControls(){
@@ -34,7 +43,13 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         chkBox1=findViewById(R.id.checkBoxConfirm);
         btnSignup=findViewById(R.id.signUpButton);
         btnSignup.setOnClickListener(this);
+
+        //retrieving userregistration data from previous activity
+        userSignupData =(HashMap<String, String>) getIntent().getSerializableExtra("dataMap");
+
     }
+
+
 
 
     @Override
@@ -76,7 +91,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
     @Override
     protected void onStart(){
         super.onStart();
-        initializeControls();
+
     }
 
     @Override
@@ -84,17 +99,30 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_part2);
         setTitle("User Registration");
-        receivedDataBundle=getIntent().getExtras();
-
-    }
+        initializeControls();
+        }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
 
             case R.id.signUpButton:
-                if(validateFields())
-                    Toast.makeText(this,"ok",Toast.LENGTH_LONG).show();
+                if(validateFields()){
+
+                    user=new User();
+
+                    userSignupData.put("email",txtEmail.getText().toString().trim());
+                    userSignupData.put("username",txtUsername.getText().toString().trim());
+                    userSignupData.put("password",txtPassword2.getText().toString().trim());
+                    user.setUserdata(userSignupData);
+
+                    firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
+
+                    //user signup
+                    firebaseDAO.userSignup(user);
+
+
+                }
                 else
                     Toast.makeText(this,"not ok",Toast.LENGTH_LONG).show();
 

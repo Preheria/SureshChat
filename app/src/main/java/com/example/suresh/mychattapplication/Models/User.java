@@ -1,18 +1,38 @@
 package com.example.suresh.mychattapplication.Models;
 
-public class User {
+import java.io.Serializable;
+import java.util.HashMap;
 
-    private String firstName;
-    private String lastName;
-    private String address;
+public class User implements Serializable{
+
+    private String userID;
+    private String firstName,lastName;
+    private String country,state,homeAddress;
     private String phone;
+    private String DOB;
     private String email;
     private String username;
     private String password;
+    private FirebaseDAO firebaseDAO;
 
 
-    public User() {
+    //default constructor is required
+    public User(){}
+
+    public void setUserdata(HashMap<String, String> userdata) {
+        this.firstName=userdata.get("fname");
+        this.lastName=userdata.get("lname");
+        this.DOB=userdata.get("DOB");
+        this.country=userdata.get("country");
+        this.state=userdata.get("state");
+        this.homeAddress=userdata.get("homeAddress");
+        this.phone=userdata.get("phone");
+        this.email=userdata.get("email");
+        this.username=userdata.get("username");
+        this.password=userdata.get("password");
+
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -28,14 +48,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhone() {
@@ -68,5 +80,65 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    //end of getter and setter for the attributes from User class
+
+    public void userSignup(){
+
+        firebaseDAO.userSignup(this);
+    }
+
+
+
+    public User getUserInstance(){
+        return  this; //returns the instance of class itself
+    }
+    public void insertUser(){
+
+    }
+
+    public void userLogin(){
+
     }
 }

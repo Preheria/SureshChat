@@ -32,6 +32,11 @@
     <string name="street_and_blcok_address">Street and blcok address</string>
     <string name="phone_number">Phone Number</string>
     <string name="next">Next</string>
+    <string name="welcomeString">Welcome to MyChat</string>
+    <string name="strUsername">Username</string>
+    <string name="strPassword">password</string>
+    <string name="strLogin">Log In</string>
+    <string name="strNewAccount">Register New Account</string>
 
     <string-array name="monthList">
         <item>JAN</item>

@@ -9,8 +9,12 @@
         <item name="spinnerDropDownItemStyle">@style/spinnerItemStyle</item>
 
     </style>
+
     <style name="spinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/txt</item>
     </style>
 
+    <style name="progressBar">
+        <item name="android:colorAccent" >@color/colorPrimary</item>
+    </style>
 </resources>
