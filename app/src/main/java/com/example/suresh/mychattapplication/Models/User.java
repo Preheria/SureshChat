@@ -19,6 +19,10 @@ public class User implements Serializable{
     //default constructor is required
     public User(){}
 
+    public User(String uid){
+        this.userID=uid;
+    }
+
     public void setUserdata(HashMap<String, String> userdata) {
         this.firstName=userdata.get("fname");
         this.lastName=userdata.get("lname");
@@ -124,13 +128,6 @@ public class User implements Serializable{
 
     //end of getter and setter for the attributes from User class
 
-    public void userSignup(){
-
-        firebaseDAO.userSignup(this);
-    }
-
-
-
     public User getUserInstance(){
         return  this; //returns the instance of class itself
     }
@@ -138,7 +135,5 @@ public class User implements Serializable{
 
     }
 
-    public void userLogin(){
 
-    }
 }

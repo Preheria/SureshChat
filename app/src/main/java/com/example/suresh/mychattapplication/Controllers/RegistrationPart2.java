@@ -1,5 +1,6 @@
 package com.example.suresh.mychattapplication.Controllers;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -99,6 +100,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_part2);
         setTitle("User Registration");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initializeControls();
         }
 
@@ -117,9 +119,15 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
                     user.setUserdata(userSignupData);
 
                     firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-
                     //user signup
                     firebaseDAO.userSignup(user);
+                    if (firebaseDAO.getFirebaseUser()!=null){
+                        Intent i = new Intent(RegistrationPart2.this, HomePage.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        user=null;
+                        startActivity(i);
+                        finish();
+                    }
 
 
                 }

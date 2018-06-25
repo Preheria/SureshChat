@@ -1,9 +1,12 @@
 package com.example.suresh.mychattapplication.Models;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.suresh.mychattapplication.Controllers.HomePage;
+import com.example.suresh.mychattapplication.Controllers.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,6 +27,7 @@ public class FirebaseDAO implements Serializable{
     private FirebaseAuth authenticationObject;
     private FirebaseUser firebaseUser;
     public static FirebaseDAO firebaseDAOObject;
+
 
 
     private FirebaseDAO(){
@@ -71,7 +75,7 @@ public class FirebaseDAO implements Serializable{
         return firebaseUser;
     }
 
-    public void setFirebaseUser(FirebaseUser firebaseUser) {
+    private void setFirebaseUser(FirebaseUser firebaseUser) {
         this.firebaseUser = firebaseUser;
     }
 
@@ -83,7 +87,7 @@ public class FirebaseDAO implements Serializable{
             return firebaseDAOObject;
     }
 
-    public void insertUser(User userInstance){
+    private void insertUser(User userInstance){
         getDbReference().child("users").child(userInstance.getUserID()).child("fName").setValue(userInstance.getFirstName());
         getDbReference().child("users").child(userInstance.getUserID()).child("lName").setValue(userInstance.getLastName());
         getDbReference().child("users").child(userInstance.getUserID()).child("DOB").setValue(userInstance.getDOB());
@@ -98,7 +102,26 @@ public class FirebaseDAO implements Serializable{
 
     }
 
-    public void userLogin(){
+    public void userLogin(final User userInstance){
+
+
+        authenticationObject.signInWithEmailAndPassword(userInstance.getEmail(), userInstance.getPassword())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            setFirebaseUser(authenticationObject.getCurrentUser());
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+
+
+                        }
+                    }
+                });
 
     }
 

@@ -15,19 +15,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,CommonActivity{
 
     private ActionBar actionBar; //this is required to remove action bar
     private Button btnLogin;
     private TextView txtSignUp;
-    private TextInputEditText uname;
+    private TextInputEditText email;
     private TextInputEditText pword;
+
+    private FirebaseDAO firebaseDAO;
 
     private View pbar;
     private View mainView;
@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void initializeControls() {
 
-        uname=findViewById(R.id.uname);
-        pword=findViewById(R.id.pword);
+        email =findViewById(R.id.loginEmail);
+        pword=findViewById(R.id.loginPassword);
 
         btnLogin=findViewById(R.id.buttonLogin);
         btnLogin.setOnClickListener(this);
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtSignUp=findViewById(R.id.txtSignUp);
         txtSignUp.setOnClickListener(this);
 
-        pbar=findViewById(R.id.progressBar);
+        pbar=findViewById(R.id.progressBarMainActivity);
         mainView=findViewById(R.id.mainView);
 
 
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean validateFields() {
 
-        if(TextUtils.isEmpty(uname.getText())){
-            uname.setError("username is required");
+        if(TextUtils.isEmpty(email.getText())){
+            email.setError("username is required");
             return false;
         }
         else if(TextUtils.isEmpty(pword.getText())) {
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Home - MyChat App");
         initializeControls();
 
     }
@@ -101,13 +102,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         protected Boolean doInBackground(String... strings) {
 
                             user=new User();
-                            user.userLogin();
-                            return true;
+                            user.setEmail(strings[0].trim());
+                            user.setPassword(strings[1].trim());
+
+                            firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
+
+                            firebaseDAO.userLogin(user);
+
+                            return firebaseDAO.getFirebaseUser() != null;
+
+
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean result){
+
+                            if(result) {
+                               // pbar.setVisibility(View.GONE);
+                                //mainView.setVisibility(View.VISIBLE);
+                                Intent i = new Intent(MainActivity.this, HomePage.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                user=null;
+                                startActivity(i);
+                                finish();
+                            }
+
                         }
                     };
-                    task1.execute(uname.getText().toString(),pword.getText().toString());
-
-
+                    task1.execute(email.getText().toString(),pword.getText().toString());
 
 
                 }
@@ -116,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.txtSignUp:
                 Intent i=new Intent(MainActivity.this,RegistrationPart1.class);
-
                 startActivity(i);
                 break;
             default:

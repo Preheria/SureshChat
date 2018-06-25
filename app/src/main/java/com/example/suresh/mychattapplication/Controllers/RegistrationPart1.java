@@ -67,7 +67,7 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
         txtHomeAddress=findViewById(R.id.homeAddress);
         txtPhone=findViewById(R.id.phone);
 
-        nextButton=(Button)findViewById(R.id.buttonNext);
+        nextButton=findViewById(R.id.buttonNext);
         nextButton.setOnClickListener(this);
 
         regFrom=findViewById(R.id.registrationForm1);
@@ -86,8 +86,8 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
             days.add(i);
         }
 
-        adapter1=new ArrayAdapter<Integer>(this,R.layout.support_simple_spinner_dropdown_item,years);
-        adapter2=new ArrayAdapter<Integer>(this,R.layout.support_simple_spinner_dropdown_item,days);
+        adapter1=new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,years);
+        adapter2=new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,days);
 
         //adding year values to yearList spinner
         yearList.setAdapter(adapter1);
@@ -134,15 +134,16 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_registration_part1);
 
         setTitle("User Registration");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initializeControls();
 
     }
 
 
     @Override
-    protected void onRestart(){
+    protected void onResume(){
+        super.onResume();
 
-        super.onRestart();
         regFrom.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
 
