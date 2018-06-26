@@ -18,6 +18,7 @@ import com.example.suresh.mychattapplication.Controllers.Fragments.FragmentManag
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
+import com.google.firebase.FirebaseException;
 
 public class HomePage extends AppCompatActivity implements CommonActivity {
 
@@ -38,12 +39,15 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     @Override
     public void initializeControls() {
 
+        //redundant but necessary statement
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
+
         tabLayout=findViewById(R.id.mainTabLayout);
         viewPager=findViewById(R.id.homepageViewPager);
         fp_adapter=new FragmentManagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fp_adapter);
         tabLayout.setupWithViewPager(viewPager);
+
         user=new User(firebaseDAO.getFirebaseUser().getUid());
 
     }
@@ -67,24 +71,32 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     //event listener for menu item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+            boolean check;
         super.onOptionsItemSelected(item);
         switch (item.getItemId()){
 
             case R.id.logout:
 
-                user=null;
-                if(firebaseDAO.getFirebaseUser()!=null){
-                    firebaseDAO.getAuthenticationObject().signOut();
-                }
-                FirebaseDAO.firebaseDAOObject=null;
-                user=null;
-                //taking back to main activity
-                Intent i=new Intent(HomePage.this,MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
+                    try {
+                        firebaseDAO.userLogOut();
+                        check=true;
+                    }
+                    catch (FirebaseException fe){
+                        Toast.makeText(HomePage.this,
+                                "Can't log right now please try again later",
+                                Toast.LENGTH_LONG).show();
+                        check=false;
+                    }
+                //to ensure that user is properly logged out
 
+                if(check) {
+                    FirebaseDAO.firebaseDAOObject = null;
+                    //taking back to main activity
+                    Intent i = new Intent(HomePage.this, MainActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
+                }
                 break;
 
             case R.id.setting:

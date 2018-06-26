@@ -9,11 +9,14 @@ import com.example.suresh.mychattapplication.Controllers.HomePage;
 import com.example.suresh.mychattapplication.Controllers.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.concurrent.Executor;
@@ -22,18 +25,27 @@ import static android.content.ContentValues.TAG;
 
 public class FirebaseDAO implements Serializable{
 
+    // objects for firebase Realtime database
     private FirebaseDatabase connectionObject;
     private DatabaseReference dbReference;
+    private boolean flag;
+
+    //objects for firebase user authentication
     private FirebaseAuth authenticationObject;
     private FirebaseUser firebaseUser;
+
+    //objects for firebase storage
+    private FirebaseStorage storageObject;
+    private StorageReference storageReference;
+
+    //static firebaseDAO object and accor to the all the objects specified above
     public static FirebaseDAO firebaseDAOObject;
 
 
 
     private FirebaseDAO(){
-
         //link to database url
-        connectionObject=FirebaseDatabase.getInstance();
+            connectionObject = FirebaseDatabase.getInstance();
 
         //link to parent node or root node in database
         dbReference=connectionObject.getReference();
@@ -44,7 +56,29 @@ public class FirebaseDAO implements Serializable{
         //current user object logged into the database
         firebaseUser=authenticationObject.getCurrentUser();
 
+        //obtaining storage object
+        storageObject=FirebaseStorage.getInstance();
 
+        //obtaining storage reference
+        storageReference=storageObject.getReference();
+
+
+    }
+
+    public FirebaseStorage getStorageObject() {
+        return storageObject;
+    }
+
+    public void setStorageObject(FirebaseStorage storageObject) {
+        this.storageObject = storageObject;
+    }
+
+    public StorageReference getStorageReference() {
+        return storageReference;
+    }
+
+    public void setStorageReference(StorageReference storageReference) {
+        this.storageReference = storageReference;
     }
 
     public FirebaseDatabase getConnectionObject() {
@@ -98,35 +132,39 @@ public class FirebaseDAO implements Serializable{
         getDbReference().child("users").child(userInstance.getUserID()).child("email").setValue(userInstance.getEmail());
         getDbReference().child("users").child(userInstance.getUserID()).child("password").setValue(userInstance.getPassword());
         getDbReference().child("users").child(userInstance.getUserID()).child("username").setValue(userInstance.getUsername());
+        getDbReference().child("users").child(userInstance.getUserID()).child("status").setValue("Hello All! I am using Mychat App!");
+        getDbReference().child("users").child(userInstance.getUserID()).child("pp_path").setValue("");
+
 
 
     }
 
-    public void userLogin(final User userInstance){
+    public boolean userLogin(final User userInstance){
 
-
-        authenticationObject.signInWithEmailAndPassword(userInstance.getEmail(), userInstance.getPassword())
+        getAuthenticationObject().signInWithEmailAndPassword(userInstance.getEmail(), userInstance.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             setFirebaseUser(authenticationObject.getCurrentUser());
+                            flag=true;
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-
-
+                        }
+                        else {
+                            flag=false;
                         }
                     }
                 });
+        Log.d("*____________FLAG_____*",""+flag);
+        return flag;
 
     }
 
-    public void userSignup(final User userInstance){
+    public void userLogOut() throws FirebaseException{
+        authenticationObject.signOut();
+    }
 
+    public boolean userSignup(final User userInstance){
 
         authenticationObject.createUserWithEmailAndPassword(userInstance.getEmail(), userInstance.getPassword())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -138,15 +176,18 @@ public class FirebaseDAO implements Serializable{
                             // Sign in success, update UI with the signed-in user's information
                             insertUser(userInstance);
 
-
+                            flag=true;
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("failure", task.getException());
+                            //Log.w("failure", task.getException());
+                            flag=false;
                         }
 
                         // ...
                     }
                 });
+
+        return flag;
     }
 
 }

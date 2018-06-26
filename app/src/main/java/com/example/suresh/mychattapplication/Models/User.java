@@ -1,5 +1,7 @@
 package com.example.suresh.mychattapplication.Models;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -12,7 +14,9 @@ public class User implements Serializable{
     private String DOB;
     private String email;
     private String username;
+    private String pp_path="";
     private String password;
+    private String status="";
     private FirebaseDAO firebaseDAO;
 
 
@@ -35,8 +39,24 @@ public class User implements Serializable{
         this.username=userdata.get("username");
         this.password=userdata.get("password");
 
+
     }
 
+    public String getPp_path() {
+        return pp_path;
+    }
+
+    public void setPp_path(String pp_path) {
+        this.pp_path = pp_path;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getFirstName() {
         return firstName;

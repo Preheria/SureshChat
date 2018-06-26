@@ -1,6 +1,8 @@
 package com.example.suresh.mychattapplication.Controllers;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
     private TextInputEditText txtPassword1;
     private TextInputEditText txtPassword2;
     private CheckBox chkBox1;
+    private View consolidateView;
 
     //hashmap for storing user registration data from previous activity
     private HashMap<String ,String> userSignupData;
@@ -42,8 +45,10 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         txtPassword1=findViewById(R.id.password1);
         txtPassword2=findViewById(R.id.password2);
         chkBox1=findViewById(R.id.checkBoxConfirm);
+        progressBar=findViewById(R.id.progressBarRegActivity);
         btnSignup=findViewById(R.id.signUpButton);
         btnSignup.setOnClickListener(this);
+        consolidateView=findViewById(R.id.consolidateView);
 
         //retrieving userregistration data from previous activity
         userSignupData =(HashMap<String, String>) getIntent().getSerializableExtra("dataMap");
@@ -104,35 +109,63 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         initializeControls();
         }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onClick(View v) {
         switch (v.getId()){
 
             case R.id.signUpButton:
-                if(validateFields()){
+                if(validateFields()) {
 
-                    user=new User();
+                    progressBar.setVisibility(View.VISIBLE);
+                    consolidateView.setVisibility(View.GONE);
 
-                    userSignupData.put("email",txtEmail.getText().toString().trim());
-                    userSignupData.put("username",txtUsername.getText().toString().trim());
-                    userSignupData.put("password",txtPassword2.getText().toString().trim());
-                    user.setUserdata(userSignupData);
+                    new AsyncTask<String, Void, Boolean>() {
 
-                    firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-                    //user signup
-                    firebaseDAO.userSignup(user);
-                    if (firebaseDAO.getFirebaseUser()!=null){
-                        Intent i = new Intent(RegistrationPart2.this, HomePage.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        user=null;
-                        startActivity(i);
-                        finish();
-                    }
+                        @Override
+                        protected Boolean doInBackground(String... strings) {
+
+                            user = new User();
+
+                            userSignupData.put("email", txtEmail.getText().toString().trim());
+                            userSignupData.put("username", txtUsername.getText().toString().trim());
+                            userSignupData.put("password", txtPassword2.getText().toString().trim());
+                            user.setUserdata(userSignupData);
+
+                            firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
+
+                            //user signup
+                            return firebaseDAO.userSignup(user);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean aBoolean) {
+                            super.onPostExecute(aBoolean);
+
+                            if (aBoolean) {
+                                Intent i = new Intent(RegistrationPart2.this, HomePage.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                user = null;
+                                startActivity(i);
+                                finish();
+                            } else {
+
+                                progressBar.setVisibility(View.GONE);
+                                consolidateView.setVisibility(View.VISIBLE);
+                                firebaseDAO = null;
+                                user = null;
+                                Toast.makeText(RegistrationPart2.this,
+                                        "Some error occured, pleas re-enter the details and try again",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+
+                            }
+
+                        }
 
 
+                    }.execute("start");
                 }
-                else
-                    Toast.makeText(this,"not ok",Toast.LENGTH_LONG).show();
 
                 break;
             default:

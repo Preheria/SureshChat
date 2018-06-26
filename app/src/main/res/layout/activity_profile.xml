@@ -5,35 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Controllers.Profile"
+    android:background="@color/white"
     >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="164dp"
-        android:layout_height="155dp"
-        android:layout_marginBottom="110dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="62dp"
-        android:src="@drawable/ic_profile_male"
-        app:civ_border_color="#9f9f9f"
-        app:civ_border_width="2dp"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="172dp"
+        android:layout_height="261dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="38dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.319" />
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:paddingBottom="5dp"
+            android:src="@drawable/ic_profile_male"
+            app:civ_border_color="#9f9f9f"
+            app:civ_border_width="2dp"
+            />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:id="@+id/btnImgUpload"
+            android:textColor="@color/white"
+            android:paddingLeft="5dp"
+            android:textSize="15sp"
+            android:text="Change picture"
+            android:background="@color/black"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="206dp"
+        android:layout_width="190dp"
         android:layout_height="201dp"
         android:layout_marginTop="60dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -43,36 +65,36 @@
             android:textSize="25sp"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
+            android:id="@+id/p_fullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:text="Full name"
-            android:id="@+id/p_fullName"
-            android:textSize="20sp"
-            android:padding="5dp"/>
+            android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/p_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
-            android:id="@+id/p_username"
             android:padding="5dp"
+            android:text="Username"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Motto"
-            android:textSize="20sp"
             android:padding="5dp"
+            android:text="Status"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/p_motto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/p_motto"
             android:padding="5dp"
+            android:text=""
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -80,18 +102,17 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="279dp"
-        android:layout_height="230dp"
-        android:layout_marginBottom="86dp"
+        android:layout_height="226dp"
+        android:layout_marginBottom="44dp"
         android:layout_marginEnd="88dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="3dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.707"
+        app:layout_constraintHorizontal_bias="0.698"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.797">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,36 +122,36 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/p_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email :"
-            android:id="@+id/p_email"
             android:padding="5dp"
+            android:text="Email :"
             android:textSize="20sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Phone :"
             android:id="@+id/p_phone"
-            android:textSize="20sp"
-            android:padding="5dp"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address "
+            android:padding="5dp"
+            android:text="Phone :"
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/p_address"
-            android:textSize="20sp"
-            android:padding="5dp"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total MyChat friend :"
+            android:padding="5dp"
+            android:text="Address "
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/p_friendCount"
-            android:textSize="20sp"
-            android:padding="5dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Total MyChat friend :"
+            android:textSize="20sp" />
 
 
     </LinearLayout>

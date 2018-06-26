@@ -13,11 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
+import com.google.firebase.FirebaseException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,CommonActivity{
 
@@ -61,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             email.setError("username is required");
             return false;
         }
+        else if(!email.getText().toString().contains("@")){
+            email.setError("Invalid email");
+            return false;
+        }
         else if(TextUtils.isEmpty(pword.getText())) {
             pword.setError("password is required");
             return false;
@@ -75,63 +81,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("Home - MyChat App");
         initializeControls();
 
-    }
+            }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.buttonLogin:
 
-                if(validateFields()){
+                if(validateFields()) {
 
                     btnLogin.setTextColor(Color.WHITE);
                     btnLogin.setBackgroundResource(R.drawable.clicked_button);
                     mainView.setVisibility(View.GONE);
                     pbar.setVisibility(View.VISIBLE);
 
-                    //this creates a thread that handles the task of verifyng username and passwords.
-                    // this is required to reduce the work load to main UU thread.
-                    @SuppressLint("StaticFieldLeak")
-                    AsyncTask<String, Void, Boolean> task1=new AsyncTask<String,Void,Boolean> (){
 
+                    new AsyncTask<String, Void, Boolean>() {
                         @Override
                         protected Boolean doInBackground(String... strings) {
+                            User user = new User();
+                            user.setEmail(strings[0]);
 
-                            user=new User();
-                            user.setEmail(strings[0].trim());
-                            user.setPassword(strings[1].trim());
+                            user.setPassword(strings[1]);
 
-                            firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
+                            firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
 
-                            firebaseDAO.userLogin(user);
-
-                            return firebaseDAO.getFirebaseUser() != null;
-
+                            return firebaseDAO.userLogin(user);
 
                         }
 
                         @Override
-                        protected void onPostExecute(Boolean result){
+                        protected void onPostExecute(Boolean aBoolean) {
+                            super.onPostExecute(aBoolean);
 
-                            if(result) {
-                               // pbar.setVisibility(View.GONE);
-                                //mainView.setVisibility(View.VISIBLE);
+                            if (aBoolean) {
                                 Intent i = new Intent(MainActivity.this, HomePage.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                user=null;
+                                user = null;
                                 startActivity(i);
                                 finish();
                             }
-
+                            else {
+                                mainView.setVisibility(View.VISIBLE);
+                                pbar.setVisibility(View.GONE);
+                                firebaseDAO=null;
+                                user=null;
+                                Toast.makeText(MainActivity.this,
+                                        "Some error occured, Please, try again later!",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
                         }
-                    };
-                    task1.execute(email.getText().toString(),pword.getText().toString());
 
-
+                    }.execute(email.getText().toString().trim(), pword.getText().toString());
                 }
 
                 break;
