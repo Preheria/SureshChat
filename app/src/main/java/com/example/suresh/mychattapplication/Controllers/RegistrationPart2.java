@@ -3,6 +3,7 @@ package com.example.suresh.mychattapplication.Controllers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,10 @@ import android.widget.Toast;
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
 
@@ -125,46 +130,73 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
                         @Override
                         protected Boolean doInBackground(String... strings) {
 
-                            user = new User();
-
                             userSignupData.put("email", txtEmail.getText().toString().trim());
                             userSignupData.put("username", txtUsername.getText().toString().trim());
                             userSignupData.put("password", txtPassword2.getText().toString().trim());
-                            user.setUserdata(userSignupData);
 
                             firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
 
-                            //user signup
-                            return firebaseDAO.userSignup(user);
+                            firebaseDAO.getAuthenticationObject()
+                                    .createUserWithEmailAndPassword(
+                                            txtEmail.getText().toString().trim(),
+                                            txtPassword2.getText().toString().trim())
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+
+                                                //establising reference to database
+                                                DatabaseReference dbrf=firebaseDAO.getDbReference()
+                                                        .child("users")
+                                                        .child(firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
+
+                                                //inserting user data
+                                                dbrf.child("fName").setValue(userSignupData.get("fname"));
+                                                dbrf.child("lName").setValue(userSignupData.get("lname"));
+                                                dbrf.child("DOB").setValue(userSignupData.get("DOB"));
+                                                dbrf.child("country").setValue(userSignupData.get("country"));
+                                                dbrf.child("state").setValue(userSignupData.get("state"));
+                                                dbrf.child("homeAddress").setValue(userSignupData.get("homeAddress"));
+                                                dbrf.child("phone").setValue(userSignupData.get("phone"));
+                                                dbrf.child("email").setValue(userSignupData.get("email"));
+                                                dbrf.child("username").setValue(userSignupData.get("username"));
+                                                dbrf.child("password").setValue(userSignupData.get("password"));
+                                                dbrf.child("pp_path").setValue("");
+                                                dbrf.child("status").setValue("Hello All! I am using Mychat App!");
+
+
+                                                Intent i = new Intent(RegistrationPart2.this, HomePage.class);
+                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(i);
+                                                finish();
+                                            }
+                                            else {
+
+                                                progressBar.setVisibility(View.GONE);
+                                                consolidateView.setVisibility(View.VISIBLE);
+                                                firebaseDAO = null;
+                                                Toast.makeText(RegistrationPart2.this,
+                                                        task.getException().toString(),
+                                                        Toast.LENGTH_SHORT
+                                                ).show();
+
+                                            }
+
+                                        }
+                                    });
+                            return true;
+
                         }
 
                         @Override
                         protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-
-                            if (aBoolean) {
-                                Intent i = new Intent(RegistrationPart2.this, HomePage.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                user = null;
-                                startActivity(i);
-                                finish();
-                            } else {
-
-                                progressBar.setVisibility(View.GONE);
-                                consolidateView.setVisibility(View.VISIBLE);
-                                firebaseDAO = null;
-                                user = null;
-                                Toast.makeText(RegistrationPart2.this,
-                                        "Some error occured, pleas re-enter the details and try again",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-
-                            }
-
                         }
 
 
                     }.execute("start");
+
+
                 }
 
                 break;

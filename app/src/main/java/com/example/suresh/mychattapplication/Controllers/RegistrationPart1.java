@@ -154,7 +154,9 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
 
                 if(validateFields()){
 
-                     @SuppressLint("StaticFieldLeak")
+                    regFrom.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    @SuppressLint("StaticFieldLeak")
                      AsyncTask<HashMap<String ,String >,Void,String> task1=new AsyncTask<HashMap<String ,String >,Void,String> (){
 
                          @Override
@@ -187,8 +189,6 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
                     };
 
                     task1.execute(dataPart1);
-                    regFrom.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
 
                 }
             }

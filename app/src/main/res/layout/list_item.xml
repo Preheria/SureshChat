@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:alpha="1"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/anItem">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_profile_male"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+
+            >
+
+            <TextView
+                android:id="@+id/fullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="18sp"
+                android:text="Full Name"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/location"
+                android:padding="2dp"
+                android:text="Address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/uid"
+                android:visibility="gone"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/IMAGE_URI"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

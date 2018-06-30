@@ -72,26 +72,27 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    tvFullname.setText(dataSnapshot.child("fName").getValue().toString()
-                            +" "
-                            +dataSnapshot.child("lName").getValue().toString()
+
+
+                    tvFullname.setText(dataSnapshot.child("fName").getValue(String.class)+R.string.space
+                            +dataSnapshot.child("lName").getValue(String.class)
                     );
 
-                    tvUsername.setText(dataSnapshot.child("username").getValue().toString());
+                    tvUsername.setText(dataSnapshot.child("username").getValue(String.class));
 
-                    tvStatus.setText(dataSnapshot.child("status").getValue().toString());
+                    tvStatus.setText(dataSnapshot.child("status").getValue(String.class));
 
-                    tvEmail.setText(dataSnapshot.child("email").getValue().toString());
+                    tvEmail.setText(dataSnapshot.child("email").getValue(String.class));
 
-                    tvPhone.setText(dataSnapshot.child("phone").getValue().toString());
+                    tvPhone.setText(dataSnapshot.child("phone").getValue(String.class));
 
-                    tvAddress.setText(dataSnapshot.child("country").getValue().toString()
-                            +" "+dataSnapshot.child("state").getValue().toString()
-                            +" "+dataSnapshot.child("homeAddress").getValue().toString()
+                    tvAddress.setText(dataSnapshot.child("country").getValue(String.class)
+                            +R.string.space+dataSnapshot.child("state").getValue(String.class)
+                            +R.string.space+dataSnapshot.child("homeAddress").getValue(String.class)
 
                     );
 
-                    tvFriendCount.setText(tvFriendCount.getText()+" : "+ 0);
+                    tvFriendCount.setText(tvFriendCount.getText());
 
                     if(dataSnapshot.child("pp_path").getValue().toString().equals("")){
                         profilePic.setImageResource(R.drawable.ic_profile_male);

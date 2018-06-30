@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,CommonActivity{
 
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView txtSignUp;
     private TextInputEditText email;
     private TextInputEditText pword;
+    private boolean flag;
 
     private FirebaseDAO firebaseDAO;
 
@@ -103,38 +108,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     new AsyncTask<String, Void, Boolean>() {
                         @Override
                         protected Boolean doInBackground(String... strings) {
-                            User user = new User();
-                            user.setEmail(strings[0]);
-
-                            user.setPassword(strings[1]);
-
+                            Log.d("***EMAIL & Passwrpd***",strings[0] + strings[1]);
                             firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
-
-                            return firebaseDAO.userLogin(user);
-
+                            firebaseDAO.getAuthenticationObject()
+                                    .signInWithEmailAndPassword(strings[0],strings[1])
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                Intent i = new Intent(MainActivity.this, HomePage.class);
+                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(i);
+                                                finish();
+                                            }
+                                            else {
+                                                mainView.setVisibility(View.VISIBLE);
+                                                pbar.setVisibility(View.GONE);
+                                                Toast.makeText(MainActivity.this,
+                                                        "Some error occured, Please, try again later!",
+                                                        Toast.LENGTH_SHORT
+                                                ).show();
+                                            }
+                                        }
+                                    });
+                            return flag;
                         }
 
                         @Override
                         protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-
-                            if (aBoolean) {
-                                Intent i = new Intent(MainActivity.this, HomePage.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                user = null;
-                                startActivity(i);
-                                finish();
-                            }
-                            else {
-                                mainView.setVisibility(View.VISIBLE);
-                                pbar.setVisibility(View.GONE);
-                                firebaseDAO=null;
-                                user=null;
-                                Toast.makeText(MainActivity.this,
-                                        "Some error occured, Please, try again later!",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
                         }
 
                     }.execute(email.getText().toString().trim(), pword.getText().toString());

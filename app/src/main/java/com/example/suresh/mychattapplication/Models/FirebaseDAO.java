@@ -2,6 +2,7 @@ package com.example.suresh.mychattapplication.Models;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,8 +14,11 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -29,7 +33,6 @@ public class FirebaseDAO implements Serializable{
     private FirebaseDatabase connectionObject;
     private DatabaseReference dbReference;
     private boolean flag;
-
     //objects for firebase user authentication
     private FirebaseAuth authenticationObject;
     private FirebaseUser firebaseUser;
@@ -39,7 +42,7 @@ public class FirebaseDAO implements Serializable{
     private StorageReference storageReference;
 
     //static firebaseDAO object and accor to the all the objects specified above
-    public static FirebaseDAO firebaseDAOObject;
+    private static FirebaseDAO firebaseDAOObject;
 
 
 
@@ -59,7 +62,7 @@ public class FirebaseDAO implements Serializable{
         //obtaining storage object
         storageObject=FirebaseStorage.getInstance();
 
-        //obtaining storage reference
+        //obtaining root storage reference
         storageReference=storageObject.getReference();
 
 
@@ -109,6 +112,10 @@ public class FirebaseDAO implements Serializable{
         return firebaseUser;
     }
 
+    public void setFirebasUser(FirebaseUser firebasUser){
+        this.firebaseUser=firebasUser;
+    }
+
     private void setFirebaseUser(FirebaseUser firebaseUser) {
         this.firebaseUser = firebaseUser;
     }
@@ -134,8 +141,6 @@ public class FirebaseDAO implements Serializable{
         getDbReference().child("users").child(userInstance.getUserID()).child("username").setValue(userInstance.getUsername());
         getDbReference().child("users").child(userInstance.getUserID()).child("status").setValue("Hello All! I am using Mychat App!");
         getDbReference().child("users").child(userInstance.getUserID()).child("pp_path").setValue("");
-
-
 
     }
 
@@ -189,5 +194,6 @@ public class FirebaseDAO implements Serializable{
 
         return flag;
     }
+
 
 }
