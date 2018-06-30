@@ -1,6 +1,5 @@
 package com.example.suresh.mychattapplication.Controllers;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,12 +20,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.lang.annotation.Target;
-
 public class UserProfile extends AppCompatActivity implements CommonActivity,View.OnClickListener{
 
     private TextView tvfullName,tvfullAddress,tvStatus;
-    private Button btnRequest;
+    private Button btnRequest1, btnRequest2;
     private ImageView imgProfileView;
     private User user;
     private String targetUserID;
@@ -64,8 +61,11 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
         tvfullName=findViewById(R.id.NameOnProfile);
         tvfullAddress=findViewById(R.id.AddressOnProfile);
         tvStatus=findViewById(R.id.StatusOnProfile);
-        btnRequest=findViewById(R.id.btnOnProfile);
-        btnRequest.setOnClickListener(this);
+        btnRequest1 =findViewById(R.id.btnOnProfile);
+        btnRequest1.setOnClickListener(this);
+
+        btnRequest2 =findViewById(R.id.btnOnProfile1);
+        btnRequest2.setOnClickListener(this);
 
         //fullname address imageURI ,userID
         targetUserID=extraBundle.getString("targetUserID");
@@ -96,7 +96,7 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
                     }
                 });
-        checkIfRequestAlreadySent();
+        checkIfRequestAlreadySentOrAlreadyReceived();
 
     }
 
@@ -108,7 +108,23 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
     @Override
     public void onClick(View v) {
 
-        sendFriendRequest();
+        switch (v.getId()){
+
+            case R.id.btnOnProfile:
+
+                if(btnRequest1.getText().equals("Send Friend Request")){
+                    sendFriendRequest();
+                }
+                break;
+
+            case R.id.btnOnProfile1:
+
+                break;
+            default:
+                break;
+        }
+
+
     }
 
     private void sendFriendRequest(){
@@ -140,7 +156,7 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isComplete()&&task.isSuccessful())
                                             {
-                                                btnRequest.setText("Request Sent");
+                                                btnRequest1.setText("Request Sent");
                                             }
                                             else{
                                                 Toast.makeText(
@@ -170,7 +186,9 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
     }
 
-    private void checkIfRequestAlreadySent(){
+    private void checkIfRequestAlreadySentOrAlreadyReceived(){
+
+        //checking if request to the user is already sent
 
         firebaseDAO.getDbReference()
                 .child("Requests")
@@ -181,13 +199,42 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         //if(dataSnapshot.getKey()==null)
-                        if(dataSnapshot.child("status").getValue(String.class)=="pending"){
-                            btnRequest.setText("Request Already Sent");
-                            btnRequest.setEnabled(false);
+                        if(dataSnapshot.hasChild("status")){
+                            btnRequest1.setText("Request Already Sent");
+                            btnRequest1.setEnabled(false);
                         }
                         else
                         {
-                            btnRequest.setText("Send Friend Request");
+
+                            //checking if the request is already received by the user
+
+                            firebaseDAO.getDbReference()
+                                    .child("Requests")
+                                    .child(user.getUserID())
+                                    .child("receivedFrom")
+                                    .child(targetUserID)
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            //if(dataSnapshot.getKey()==null)
+                                            if(dataSnapshot.hasChild("status")){
+                                                btnRequest1.setText("Accept Request");
+                                                btnRequest2.setText("Decline Request");
+                                                btnRequest2.setVisibility(View.VISIBLE);
+                                            }
+                                            else
+                                            {
+                                                btnRequest1.setText("Send Friend Request");
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
                         }
 
                           }
@@ -199,4 +246,6 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                 });
 
     }
+
+
 }
