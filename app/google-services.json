@@ -23,8 +23,12 @@
           }
         },
         {
-          "client_id": "432112208573-s3dl4k3cjdreouuppi92v7oqfuh8f6m3.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "432112208573-fb2bnp0tj44a4tqjphq9vgqcl9mvk304.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.suresh.mychattapplication",
+            "certificate_hash": "665fb862c56fd54ad61a82887a873d0fa78ca546"
+          }
         },
         {
           "client_id": "432112208573-s3dl4k3cjdreouuppi92v7oqfuh8f6m3.apps.googleusercontent.com",

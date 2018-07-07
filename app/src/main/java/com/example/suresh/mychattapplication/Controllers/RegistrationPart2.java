@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
+import com.example.suresh.mychattapplication.Models.Services.DeviceTokenService;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -146,6 +148,13 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
 
+                                                String token=(new DeviceTokenService()).getRefreshedToken();
+                                                Log.e("****TOKen",token);
+                                                firebaseDAO.saveDeviceTokens(getApplicationContext(),
+                                                        firebaseDAO.getAuthenticationObject().getCurrentUser().getUid(),
+                                                        token
+                                                );
+
                                                 //establising reference to database
                                                 DatabaseReference dbrf=firebaseDAO.getDbReference()
                                                         .child("users")
@@ -167,6 +176,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
 
 
                                                 Intent i = new Intent(RegistrationPart2.this, HomePage.class);
+                                                i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
                                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
                                                 finish();

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:alpha="1"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/anItem1">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/thumbnail1"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_profile_male"/>
+
+        <LinearLayout
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/aBlock"
+
+            >
+
+            <TextView
+                android:id="@+id/fullName1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textSize="18sp"
+                android:text="Full Name"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/location1"
+                android:padding="2dp"
+                android:text="Address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/uid1"
+                android:visibility="gone"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/IMAGE_URI1"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+        <Button
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:minHeight="40dp"
+            android:minWidth="70dp"
+            android:textSize="12sp"
+            android:text="Accept"/>
+
+        <Button
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/btnDecline"
+            android:padding="0sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:minWidth="70dp"
+            android:textColor="@color/white"
+            android:background="@color/black"
+            android:textSize="12sp"
+            android:text="Decline"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

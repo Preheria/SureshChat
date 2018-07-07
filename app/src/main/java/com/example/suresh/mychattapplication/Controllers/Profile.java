@@ -74,7 +74,7 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
 
 
-                    tvFullname.setText(dataSnapshot.child("fName").getValue(String.class)+R.string.space
+                    tvFullname.setText(dataSnapshot.child("fName").getValue(String.class)+" "
                             +dataSnapshot.child("lName").getValue(String.class)
                     );
 
@@ -87,8 +87,8 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
                     tvPhone.setText(dataSnapshot.child("phone").getValue(String.class));
 
                     tvAddress.setText(dataSnapshot.child("country").getValue(String.class)
-                            +R.string.space+dataSnapshot.child("state").getValue(String.class)
-                            +R.string.space+dataSnapshot.child("homeAddress").getValue(String.class)
+                            +" "+dataSnapshot.child("state").getValue(String.class)
+                            +" "+dataSnapshot.child("homeAddress").getValue(String.class)
 
                     );
 

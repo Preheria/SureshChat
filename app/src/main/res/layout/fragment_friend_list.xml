@@ -1,18 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Controllers.Fragments.FriendList"
+    android:orientation="vertical"
     >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/receivedRequests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="agdfgf"
+        android:orientation="vertical">
 
-         />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LabelReceivedRequests"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:textAllCaps="true"
+            android:text="Received Requests"/>
+
+        <ListView
+            android:id="@+id/receivedRequestLists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+    </LinearLayout>
+    
+
+    <LinearLayout
+        android:id="@+id/sentRequests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LabelSentRequests"
+            android:text="Sent Requests"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:padding="15dp"
+            />
+
+        <ListView
+            android:id="@+id/sentRequestLists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LabelFriends"
+            android:text="Your Friends"
+            android:textAllCaps="true"
+            android:padding="15dp"
+            android:textSize="15sp"/>
+
+        <ListView
+            android:id="@+id/friendLists"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+    </LinearLayout>
 
 
-</FrameLayout>
+</LinearLayout>

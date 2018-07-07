@@ -1,7 +1,6 @@
-package com.example.suresh.mychattapplication.Controllers;
+package com.example.suresh.mychattapplication.Controllers.Fragments;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,42 +14,41 @@ import com.example.suresh.mychattapplication.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SearchViewListAdapter extends ArrayAdapter<User> {
+public class FriendListAdapter extends ArrayAdapter<User> {
+
     private Context context;
     private int resource;
-    private ArrayList<User> userList;
+    private ArrayList<User> userlist;
 
-
-    public SearchViewListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> userList) {
-        super(context,resource,userList);
+    public FriendListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<User> userList) {
+        super(context, resource, userList);
         this.context=context;
         this.resource=resource;
-        this.userList=userList;
+        this.userlist=userList;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
         LayoutInflater inflater=LayoutInflater.from(context);
 
         //each item will be written as a view which needs to be returned
         View view=inflater.inflate(resource,null);
 
-        //initialization of View elements
-        TextView fullName=view.findViewById(R.id.fullName);
-        TextView location=view.findViewById(R.id.location);
-        TextView imageURI=view.findViewById(R.id.IMAGE_URI);
-        TextView uid=view.findViewById(R.id.uid);
-        CircleImageView thumbnail=view.findViewById(R.id.thumbnail);
-        ViewGroup parentView=view.findViewById(R.id.anItem);
+        TextView fullName=view.findViewById(R.id.fullNameFriendItem);
+        TextView location=view.findViewById(R.id.locationFriendItem);
+        TextView imageURI=view.findViewById(R.id.IMAGE_URI_FriendItem);
+        TextView uid=view.findViewById(R.id.uidFriendItem);
+        CircleImageView thumbnail=view.findViewById(R.id.thumbnailFriendItem);
+        ViewGroup parentView=view.findViewById(R.id.friendItem);
 
         //getting a user at a particular index
-        User user=userList.get(position);
+        User user=userlist.get(position);
 
         //binding model data with view data
         fullName.setText(user.getFirstName()+" "+user.getLastName());

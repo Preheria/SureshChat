@@ -18,16 +18,17 @@ import android.widget.Toast;
 
 
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
+import com.example.suresh.mychattapplication.Models.Services.DeviceTokenService;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,CommonActivity{
 
     private ActionBar actionBar; //this is required to remove action bar
+
     private Button btnLogin;
     private TextView txtSignUp;
     private TextInputEditText email;
@@ -116,7 +117,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
+
+                                                String token=(new DeviceTokenService()).getRefreshedToken();
+                                                firebaseDAO.saveDeviceTokens(
+                                                        getApplicationContext(),
+                                                        firebaseDAO.getAuthenticationObject().getCurrentUser().getUid(),
+                                                        token
+                                                );
+                                                FirebaseDAO.UID=firebaseDAO.getAuthenticationObject().getCurrentUser().getUid();
                                                 Intent i = new Intent(MainActivity.this, HomePage.class);
+                                                i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
                                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
                                                 finish();

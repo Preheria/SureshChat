@@ -71,8 +71,11 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
         //redundant but necessary statement
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
         tabLayout=findViewById(R.id.mainTabLayout);
+
         viewPager=findViewById(R.id.homepageViewPager);
+
         fp_adapter=new FragmentManagerAdapter(getSupportFragmentManager());
+
         viewPager.setAdapter(fp_adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -129,9 +132,9 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 userList.clear();
                 adapter.notifyDataSetChanged();
-                firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
 
                 firebaseDAO.getDbReference()
                         .child("users")
@@ -264,8 +267,9 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
                 //to ensure that user is properly logged out
 
                 if(check) {
-                    FirebaseDAO fdao=FirebaseDAO.getFirebaseDAOObject();
-                    fdao= null;
+
+                    firebaseDAO=null;
+                    user=null;
                     //taking back to main activity
                     Intent i = new Intent(HomePage.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

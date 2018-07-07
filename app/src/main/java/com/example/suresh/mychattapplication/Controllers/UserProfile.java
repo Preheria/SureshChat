@@ -3,6 +3,7 @@ package com.example.suresh.mychattapplication.Controllers;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +23,8 @@ import com.squareup.picasso.Picasso;
 
 public class UserProfile extends AppCompatActivity implements CommonActivity,View.OnClickListener{
 
-    private TextView tvfullName,tvfullAddress,tvStatus;
-    private Button btnRequest1, btnRequest2;
-    private ImageView imgProfileView;
+    private TextView tvStatus;
+    private Button btnSendFriendRequest, btnSendMessage,btnUnfriend;
     private User user;
     private String targetUserID;
     private Bundle extraBundle;
@@ -42,13 +42,15 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
             getSupportActionBar().setTitle(extraBundle.getString("fullname")+"'s Profile");
         }
 
+        initializeControls();
+
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        initializeControls();
+
 
     }
 
@@ -57,15 +59,20 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
         user=new User(extraBundle.getString("loggedInUserID"));
 
-        imgProfileView=findViewById(R.id.imageViewOnProfile);
-        tvfullName=findViewById(R.id.NameOnProfile);
-        tvfullAddress=findViewById(R.id.AddressOnProfile);
+        ImageView imgProfileView = findViewById(R.id.imageViewOnProfile);
+        TextView tvfullName = findViewById(R.id.NameOnProfile);
+        TextView tvfullAddress = findViewById(R.id.AddressOnProfile);
         tvStatus=findViewById(R.id.StatusOnProfile);
-        btnRequest1 =findViewById(R.id.btnOnProfile);
-        btnRequest1.setOnClickListener(this);
 
-        btnRequest2 =findViewById(R.id.btnOnProfile1);
-        btnRequest2.setOnClickListener(this);
+        btnSendFriendRequest=findViewById(R.id.btnSendRequest);
+        btnSendFriendRequest.setOnClickListener(this);
+
+        btnSendMessage=findViewById(R.id.btnSendMessage);
+        btnSendMessage.setOnClickListener(this);
+
+        btnUnfriend=findViewById(R.id.btnUnFriend);
+        btnUnfriend.setOnClickListener(this);
+
 
         //fullname address imageURI ,userID
         targetUserID=extraBundle.getString("targetUserID");
@@ -96,7 +103,8 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
                     }
                 });
-        checkIfRequestAlreadySentOrAlreadyReceived();
+
+        checkFriendshipWithTagetUser();
 
     }
 
@@ -110,15 +118,17 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
         switch (v.getId()){
 
-            case R.id.btnOnProfile:
+            case R.id.btnSendRequest:
 
-                if(btnRequest1.getText().equals("Send Friend Request")){
                     sendFriendRequest();
-                }
+                    break;
+
+        case R.id.btnUnFriend:
+
+            unFriend();
                 break;
 
-            case R.id.btnOnProfile1:
-
+            case R.id.btnSendMessage:
                 break;
             default:
                 break;
@@ -140,7 +150,7 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful())
+                        if(task.isComplete())
                         {
                             //now insertion to request sender's table begins
                             firebaseDAO
@@ -154,9 +164,10 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isComplete()&&task.isSuccessful())
+                                            if(task.isComplete())
                                             {
-                                                btnRequest1.setText("Request Sent");
+                                                btnSendFriendRequest.setText("Request Sent");
+                                                btnSendFriendRequest.setEnabled(false);
                                             }
                                             else{
                                                 Toast.makeText(
@@ -186,7 +197,34 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
     }
 
-    private void checkIfRequestAlreadySentOrAlreadyReceived(){
+    private void checkFriendshipWithTagetUser(){
+
+        //checking if the targetuser is already friend with the current user
+        firebaseDAO.getDbReference()
+                .child("FriendLists")
+                .child(user.getUserID())
+                .child(targetUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.hasChildren()){
+
+                            btnSendMessage.setText("Send Message");
+                            btnSendMessage.setVisibility(View.VISIBLE);
+                            btnUnfriend.setText("Unfriend");
+                            btnUnfriend.setVisibility(View.VISIBLE);
+                            btnSendFriendRequest.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
         //checking if request to the user is already sent
 
@@ -198,35 +236,86 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        //if(dataSnapshot.getKey()==null)
+
                         if(dataSnapshot.hasChild("status")){
-                            btnRequest1.setText("Request Already Sent");
-                            btnRequest1.setEnabled(false);
+
+                            btnSendFriendRequest.setText("Request Sent");
+                            btnSendFriendRequest.setVisibility(View.VISIBLE);
                         }
-                        else
-                        {
+                    }
 
-                            //checking if the request is already received by the user
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    }
+                });
+
+            //checking if the request is already received by the user
+
+            firebaseDAO.getDbReference()
+                    .child("Requests")
+                    .child(user.getUserID())
+                    .child("receivedFrom")
+                    .child(targetUserID)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            if(dataSnapshot.hasChild("status")){
+
+                                btnSendFriendRequest.setText("Request Received");
+                                btnSendFriendRequest.setVisibility(View.VISIBLE);
+                                btnSendFriendRequest.setEnabled(false);
+
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+            if(TextUtils.isEmpty(btnSendFriendRequest.getText())) {
+                btnSendFriendRequest.setText("Send Request");
+                btnSendFriendRequest.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+
+    private void unFriend(){
+
+        //removing friend from current user's list
+        firebaseDAO.getDbReference()
+                .child("FriendLists")
+                .child(user.getUserID())
+                .child(targetUserID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChildren()){
+                            dataSnapshot.getRef().removeValue();
+
+                            //removing current user from target user's list
                             firebaseDAO.getDbReference()
-                                    .child("Requests")
-                                    .child(user.getUserID())
-                                    .child("receivedFrom")
+                                    .child("FriendLists")
                                     .child(targetUserID)
+                                    .child(user.getUserID())
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            //if(dataSnapshot.getKey()==null)
-                                            if(dataSnapshot.hasChild("status")){
-                                                btnRequest1.setText("Accept Request");
-                                                btnRequest2.setText("Decline Request");
-                                                btnRequest2.setVisibility(View.VISIBLE);
-                                            }
-                                            else
-                                            {
-                                                btnRequest1.setText("Send Friend Request");
-                                            }
 
+                                            if(dataSnapshot.hasChildren()){
+                                                dataSnapshot.getRef().removeValue();
+                                                btnSendMessage.setVisibility(View.GONE);
+                                                btnUnfriend.setVisibility(View.GONE);
+                                                btnSendFriendRequest.setText("Send Request");
+                                                btnSendFriendRequest.setVisibility(View.VISIBLE);
+                                            }
                                         }
 
                                         @Override
@@ -234,10 +323,8 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
                                         }
                                     });
-
                         }
-
-                          }
+                    }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -247,5 +334,8 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
 
     }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 }

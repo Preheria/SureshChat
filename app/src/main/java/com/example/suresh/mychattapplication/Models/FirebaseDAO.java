@@ -1,5 +1,6 @@
 package com.example.suresh.mychattapplication.Models;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,7 @@ public class FirebaseDAO implements Serializable{
 
     // objects for firebase Realtime database
     private FirebaseDatabase connectionObject;
-    private DatabaseReference dbReference;
+    private DatabaseReference dbReference,tokenReference;
     private boolean flag;
     //objects for firebase user authentication
     private FirebaseAuth authenticationObject;
@@ -43,8 +44,11 @@ public class FirebaseDAO implements Serializable{
 
     //static firebaseDAO object and accor to the all the objects specified above
     private static FirebaseDAO firebaseDAOObject;
+     public static String UID;
 
-
+    public DatabaseReference getTokenReference() {
+        return tokenReference;
+    }
 
     private FirebaseDAO(){
         //link to database url
@@ -65,6 +69,7 @@ public class FirebaseDAO implements Serializable{
         //obtaining root storage reference
         storageReference=storageObject.getReference();
 
+        tokenReference=dbReference.child("DeviceTokens");
 
     }
 
@@ -195,5 +200,23 @@ public class FirebaseDAO implements Serializable{
         return flag;
     }
 
+
+    public void saveDeviceTokens(final Context context, String uid, String token){
+        tokenReference.child(uid).child("deviceToken").setValue(token)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    //no code required to respond to succesful task
+                }
+                else
+                {
+                    Toast.makeText(context,task.getException().toString(),Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
 
 }
