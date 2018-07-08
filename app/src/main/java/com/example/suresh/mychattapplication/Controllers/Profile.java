@@ -50,7 +50,7 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
     @Override
     public void initializeControls() {
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-        user=new User(firebaseDAO.getFirebaseUser().getUid());
+        user=new User(FirebaseDAO.UID);
 
         profilePic=findViewById(R.id.profile_image);
         //holds reference to the database path

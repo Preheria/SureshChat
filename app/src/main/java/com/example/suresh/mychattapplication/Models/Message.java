@@ -1,63 +1,64 @@
 package com.example.suresh.mychattapplication.Models;
 
-public class Message {
+import co.intentservice.chatui.models.ChatMessage;
 
-    private String messageID;
-    private  User sender;
-    private User receiver;
-    private String receivedDateTime;
-    private String messageContent;
-    private String messageStatus;
+public class Message extends ChatMessage{
 
-    public Message() {
+    private String sender,receiver;
 
+
+   public  Message(String message, long timestamp, Type type){
+        super(message,timestamp,type);
     }
 
-    public String getMessageID() {
-        return messageID;
-    }
-
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
-    }
-
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 
-    public String getReceivedDateTime() {
-        return receivedDateTime;
+    @Override
+    public long getTimestamp() {
+        return super.getTimestamp();
     }
 
-    public void setReceivedDateTime(String receivedDateTime) {
-        this.receivedDateTime = receivedDateTime;
+    @Override
+    public void setTimestamp(long timestamp) {
+        super.setTimestamp(timestamp);
     }
 
-    public String getMessageContent() {
-        return messageContent;
+    @Override
+    public String getMessage() {
+        return super.getMessage();
     }
 
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent;
+    @Override
+    public void setMessage(String message) {
+        super.setMessage(message);
     }
 
-    public String getMessageStatus() {
-        return messageStatus;
+    @Override
+    public Type getType() {
+        return super.getType();
     }
 
-    public void setMessageStatus(String messageStatus) {
-        this.messageStatus = messageStatus;
+    @Override
+    public void setType(Type type) {
+        super.setType(type);
+    }
+
+    @Override
+    public String getFormattedTime() {
+        return super.getFormattedTime();
     }
 }

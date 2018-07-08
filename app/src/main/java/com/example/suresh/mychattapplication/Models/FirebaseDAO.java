@@ -44,7 +44,7 @@ public class FirebaseDAO implements Serializable{
 
     //static firebaseDAO object and accor to the all the objects specified above
     private static FirebaseDAO firebaseDAOObject;
-     public static String UID;
+     public static String UID,CHAT_ID;
 
     public DatabaseReference getTokenReference() {
         return tokenReference;

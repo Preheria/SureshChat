@@ -80,7 +80,7 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         //creating user with reference to FirebaseAuth.current user's id
-        user=new User(firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
+        user=new User(FirebaseDAO.UID);
         userList=new ArrayList<User>();
 
         //method for creating and initializing list view and its operaitons

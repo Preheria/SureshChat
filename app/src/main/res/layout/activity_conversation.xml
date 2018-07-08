@@ -15,6 +15,11 @@
         android:layout_height="match_parent"
         chatview:backgroundColor="@color/white"
         chatview:bubbleBackgroundRcv="@color/white"
+
+
+        chatview:inputTextColor="@color/black"
+
+
         />
 
 </android.support.constraint.ConstraintLayout>

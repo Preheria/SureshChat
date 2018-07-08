@@ -33,8 +33,14 @@
         <activity
             android:name=".Controllers.MainActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
+
         <activity
             android:name=".Controllers.HomePage"
             android:launchMode="singleTop">
@@ -58,7 +64,6 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".Controllers.ExtraTest" />
         <activity
             android:name=".Controllers.UserProfile"
             android:noHistory="true"
@@ -80,12 +85,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Controllers.Conversation" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".Controllers.Conversation">
 
         </activity>
     </application>

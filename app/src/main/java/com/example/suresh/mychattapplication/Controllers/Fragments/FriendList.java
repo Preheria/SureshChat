@@ -96,10 +96,19 @@ public class FriendList extends Fragment implements CommonActivity{
             SRLAdapter=new SentRequestListAdapter(parentView.getContext(),R.layout.sent_request_item,sentRequestsArray);
             RRLAdapter=new ReceivedRequestListAdapter(parentView.getContext(),R.layout.received_request_item,friendRequestsArray);
 
-        friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView fullName=view.findViewById(R.id.fullNameFriendItem);
+                TextView uid=view.findViewById(R.id.uidFriendItem);
+                TextView imageURI=view.findViewById(R.id.IMAGE_URI_FriendItem);
+
                 Intent i=new Intent(getActivity(),Conversation.class);
+                i.putExtra("fullname",fullName.getText());
+                i.putExtra("targetUserID",uid.getText());
+                i.putExtra("imageURI",imageURI.getText());
                 startActivity(i);
             }
         });
