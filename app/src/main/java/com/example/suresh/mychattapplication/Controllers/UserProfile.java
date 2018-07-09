@@ -36,7 +36,9 @@ public class UserProfile extends AppCompatActivity implements CommonActivity,Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         extraBundle=getIntent().getExtras();
+
 
         //setting app bar's titl
         if(getSupportActionBar()!=null){

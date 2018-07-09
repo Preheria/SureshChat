@@ -18,6 +18,7 @@ import com.example.suresh.mychattapplication.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -25,6 +26,7 @@ import java.util.HashMap;
 
 import co.intentservice.chatui.ChatView;
 import co.intentservice.chatui.models.ChatMessage;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Conversation extends AppCompatActivity implements CommonActivity, View.OnClickListener{
 
@@ -32,7 +34,7 @@ public class Conversation extends AppCompatActivity implements CommonActivity, V
     private ActionBar actionBar;
     private ImageButton btnBack;
     private FirebaseDAO firebaseDAO;
-
+    private CircleImageView circleImageView;
 
 
     private String targetUserID,imageURI,fullname;
@@ -57,6 +59,15 @@ public class Conversation extends AppCompatActivity implements CommonActivity, V
         actionBar.setCustomView(R.layout.actionbar_for_chat_activity);
         TextView title=findViewById(R.id.txtUsername);
         title.setText(fullname);
+
+        circleImageView=findViewById(R.id.thumbnailChatActivity);
+        if(TextUtils.isEmpty(imageURI)){
+            circleImageView.setImageResource(R.drawable.ic_profile_male);
+        }
+        else
+        {
+            Picasso.get().load(imageURI).placeholder(R.drawable.ic_profile_male).into(circleImageView);
+        }
 
         initializeControls();
         checkForExistingConversation();
@@ -95,6 +106,13 @@ public class Conversation extends AppCompatActivity implements CommonActivity, V
                         .child(FirebaseDAO.CHAT_ID)
                         .push()
                         .setValue(message);
+
+                firebaseDAO.getDbReference()
+                        .child("ConversationLogs")
+                        .child(FirebaseDAO.UID)
+                        .child(targetUserID)
+                        .child("lastAccessedOn")
+                        .setValue(String.valueOf(chatMessage.getTimestamp()));
                 return true;
             }
         });
@@ -154,14 +172,13 @@ public class Conversation extends AppCompatActivity implements CommonActivity, V
                             firebaseDAO.getDbReference().child("Messages")
                                                         .child(FirebaseDAO.CHAT_ID)
                                                         .push()
-                                                        .setValue("00");
+                                                        .setValue("Beginning of chat");
 
                         }
                         else
                         {
                             FirebaseDAO.CHAT_ID=dataSnapshot.getValue(String.class);
                         }
-
 
                     }
 
@@ -193,26 +210,29 @@ public class Conversation extends AppCompatActivity implements CommonActivity, V
 
                             firebaseDAO.getDbReference().child("Messages")
                                     .child(chatID)
+                                    .orderByKey()
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                             chatView.clearMessages();
 
-                                            for (DataSnapshot eachMessage : dataSnapshot.getChildren()) {
+                                                for (DataSnapshot eachMessage : dataSnapshot.getChildren()) {
 
-                                                String message = eachMessage.child("message").getValue(String.class);
-                                                Long timeStamp = Long.valueOf(eachMessage.child("timestamp").getValue(String.class));
-                                                String senderId = eachMessage.child("sender").getValue(String.class);
-                                                ChatMessage chatMessage;
+                                                    String message = eachMessage.child("message").getValue(String.class);
+                                                    String timeStamp = eachMessage.child("timestamp").getValue(String.class);
+                                                    String  senderId = eachMessage.child("sender").getValue(String.class);
 
-                                                if (senderId.equals(FirebaseDAO.UID)) {
-                                                    chatMessage = new ChatMessage(message, timeStamp, ChatMessage.Type.SENT);
-                                                } else {
-                                                    chatMessage = new ChatMessage(message, timeStamp, ChatMessage.Type.RECEIVED);
+                                                    ChatMessage chatMessage;
+
+                                                    if (senderId.equals(FirebaseDAO.UID)) {
+                                                        chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.SENT);
+                                                    } else {
+                                                        chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.RECEIVED);
+                                                    }
+                                                    chatView.addMessage(chatMessage);
                                                 }
-                                                chatView.addMessage(chatMessage);
-                                            }
+
 
 
                                         }

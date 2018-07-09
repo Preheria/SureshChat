@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/AndroidStudioDirectory/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/AndroidStudioDirectory/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_notifications_active_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -67,9 +67,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_back" />
+                                      <entry key="imageAsset" value="C:\Users\Suresh\Desktop\online.png" />
+                                      <entry key="outputName" value="ic_action_notification" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="themeColor" value="060809" />
                                     </map>
                                   </option>
                                 </PersistentState>

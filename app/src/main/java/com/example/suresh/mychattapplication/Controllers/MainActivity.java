@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         protected Boolean doInBackground(String... strings) {
                             Log.d("***EMAIL & Passwrpd***",strings[0] + strings[1]);
                             firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
+
+
+
                             firebaseDAO.getAuthenticationObject()
                                     .signInWithEmailAndPassword(strings[0],strings[1])
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

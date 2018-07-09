@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".MyChatApplication"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Controllers.RegistrationPart1"
@@ -67,12 +68,16 @@
         <activity
             android:name=".Controllers.UserProfile"
             android:noHistory="true"
-            android:parentActivityName=".Controllers.HomePage" />
-        <!--
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
-        -->
+            android:parentActivityName=".Controllers.HomePage">
+                <intent-filter>
+                    <!-- this action is required for forground notification to work -->
+                    <action android:name="TARGET_INTENT_FOR_RECEIVED_NOTIFICATION"/>
+                    <category android:name="android.intent.category.DEFAULT" />
+
+                </intent-filter>
+
+        </activity>
+
 
         <service android:name=".Models.Services.DeviceTokenService">
             <intent-filter>
