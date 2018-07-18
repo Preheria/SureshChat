@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,15 +38,21 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        getSupportActionBar().setTitle("My profile");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initializeControls();
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_profile);
+            getSupportActionBar().setTitle("My profile");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            initializeViews();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception Caught"+e.getMessage());
+        }
     }
 
     @Override
-    public void initializeControls() {
+    public void initializeViews() {
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
         user=new User(FirebaseDAO.UID);
 
@@ -94,7 +98,7 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
                     tvFriendCount.setText(tvFriendCount.getText());
 
-                    if(dataSnapshot.child("pp_path").getValue().toString().equals("")){
+                    if(dataSnapshot.child("pp_path").getValue(String.class).equals("")){
                         profilePic.setImageResource(R.drawable.ic_profile_male);
                     }
                     else{
@@ -140,50 +144,55 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
+
+        try {
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
 
 
-                firebaseDAO.getStorageReference()
-                        .child("profile_pictures")
-                        .child(user.getUserID())
-                        .child(user.getUserID())
-                        .putFile(result.getUri())
-                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    firebaseDAO.getStorageReference()
+                            .child("profile_pictures")
+                            .child(user.getUserID())
+                            .child(user.getUserID())
+                            .putFile(result.getUri())
+                            .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                            //if uploading to firebase storage is successfull
-                            if(task.isSuccessful()) {
+                                    //if uploading to firebase storage is successfull
+                                    if (task.isSuccessful()) {
 
-                                //if download URL for the image uploaded has been generated
-                                firebaseDAO.getStorageReference()
-                                        .child("profile_pictures")
-                                        .child(user.getUserID())
-                                        .child(user.getUserID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-
-                                        //updating image path in user's pp_path attribute
-                                        firebaseDAO.getDbReference()
-                                                .child("users")
+                                        //if download URL for the image uploaded has been generated
+                                        firebaseDAO.getStorageReference()
+                                                .child("profile_pictures")
                                                 .child(user.getUserID())
-                                                .child("pp_path").setValue(uri.toString());
+                                                .child(user.getUserID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
 
-                                        Picasso.get().load(uri.toString()).into(profilePic);
+                                                //updating image path in user's pp_path attribute
+                                                firebaseDAO.getDbReference()
+                                                        .child("users")
+                                                        .child(user.getUserID())
+                                                        .child("pp_path").setValue(uri.toString());
+
+                                                Picasso.get().load(uri.toString()).into(profilePic);
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(Profile.this, "some error occured.please try again later", Toast.LENGTH_LONG).show();
                                     }
-                                });
-                            }
-                            else {
-                                Toast.makeText(Profile.this,"some error occured.please try again later",Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+                                }
+                            });
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                }
             }
+        }
+        catch ( Exception e){
+            System.out.println("Exception Caught :"+e.getMessage());
         }
     }
 

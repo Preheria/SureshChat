@@ -12,7 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
-public class MyAppMessagingService extends FirebaseMessagingService {
+public class MyAppNotificationService extends FirebaseMessagingService {
 
 
     @Override
@@ -21,12 +21,12 @@ public class MyAppMessagingService extends FirebaseMessagingService {
 
 
         //getting notification data from the message payload
-        String title=remoteMessage.getNotification().getTitle();
-        String body=remoteMessage.getNotification().getBody();
-        String action=remoteMessage.getNotification().getClickAction();
+        String notificationTitle=remoteMessage.getNotification().getTitle();
+        String notificationBody=remoteMessage.getNotification().getBody();
+        String notificationAction=remoteMessage.getNotification().getClickAction();
 
         //getting extra data from the message payload
-        Intent targetIntent=new Intent(action);
+        Intent targetIntent=new Intent(notificationAction);
         targetIntent.putExtra("fullname",remoteMessage.getData().get("fullname"));
         targetIntent.putExtra("targetUserID",remoteMessage.getData().get("targetUserID"));
         targetIntent.putExtra("loggedInUserID",remoteMessage.getData().get("loggedInUserID"));
@@ -42,8 +42,8 @@ public class MyAppMessagingService extends FirebaseMessagingService {
         //setting up parameters for notification to be shown
         NotificationCompat.Builder notification=new NotificationCompat.Builder(this,"chanel1")
                                                 .setSmallIcon(R.mipmap.ic_launcher_background)
-                                                .setContentTitle(title)
-                                                .setContentText(body)
+                                                .setContentTitle(notificationTitle)
+                                                .setContentText(notificationBody)
                                                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                                                 .setContentIntent(pendingIntent);
 

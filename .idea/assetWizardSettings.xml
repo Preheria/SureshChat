@@ -46,6 +46,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
+                                                <entry key="paddingPercent" value="10" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -67,10 +68,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\Suresh\Desktop\online.png" />
-                                      <entry key="outputName" value="ic_action_notification" />
+                                      <entry key="outputName" value="ic_action_online" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="060809" />
+                                      <entry key="themeColor" value="00ff00" />
                                     </map>
                                   </option>
                                 </PersistentState>

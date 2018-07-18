@@ -42,20 +42,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private User user;
 
+
     @Override
-    public void initializeControls() {
+    public void initializeViews() {
 
-        email =findViewById(R.id.loginEmail);
-        pword=findViewById(R.id.loginPassword);
+        try {
+            email = findViewById(R.id.loginEmail);
+            pword = findViewById(R.id.loginPassword);
 
-        btnLogin=findViewById(R.id.buttonLogin);
-        btnLogin.setOnClickListener(this);
+            btnLogin = findViewById(R.id.buttonLogin);
+            btnLogin.setOnClickListener(this);
 
-        txtSignUp=findViewById(R.id.txtSignUp);
-        txtSignUp.setOnClickListener(this);
+            txtSignUp = findViewById(R.id.txtSignUp);
+            txtSignUp.setOnClickListener(this);
 
-        pbar=findViewById(R.id.progressBarMainActivity);
-        mainView=findViewById(R.id.mainView);
+            pbar = findViewById(R.id.progressBarMainActivity);
+            mainView = findViewById(R.id.mainView);
+        }
+        catch (Exception e){
+                Log.e("ERROR",e.getMessage());
+        }
 
 
     }
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean validateFields() {
 
+        try{
         if(TextUtils.isEmpty(email.getText())){
             email.setError("username is required");
             return false;
@@ -79,17 +86,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else{
             return true;
+        }}
+        catch (Exception e){
+            return false;
         }
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initializeControls();
+        initializeViews();
+        }
+        catch (Exception e){
+            Log.e("startup problem",e.getMessage());
+        }
 
-            }
+        }
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -109,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     new AsyncTask<String, Void, Boolean>() {
                         @Override
                         protected Boolean doInBackground(String... strings) {
-                            Log.d("***EMAIL & Passwrpd***",strings[0] + strings[1]);
+
                             firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
 
 
@@ -122,13 +137,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             if (task.isSuccessful()) {
 
                                                 String token=(new DeviceTokenService()).getRefreshedToken();
+
                                                 firebaseDAO.saveDeviceTokens(
                                                         getApplicationContext(),
                                                         firebaseDAO.getAuthenticationObject().getCurrentUser().getUid(),
                                                         token
                                                 );
+
+
                                                 FirebaseDAO.UID=firebaseDAO.getAuthenticationObject().getCurrentUser().getUid();
-                                                Intent i = new Intent(MainActivity.this, HomePage.class);
+
+                                                firebaseDAO.getDbReference()
+                                                        .child("users")
+                                                        .child(FirebaseDAO.UID)
+                                                        .child("online")
+                                                        .addValueEventListener(FirebaseDAO.valueEventListener);
+
+
+                                                Intent i = new Intent(MainActivity.this, HomeActivity.class);
                                                 i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
                                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
@@ -157,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.txtSignUp:
-                Intent i=new Intent(MainActivity.this,RegistrationPart1.class);
+                Intent i=new Intent(MainActivity.this,RegistrationPart1Activity.class);
                 startActivity(i);
                 break;
             default:
@@ -165,8 +191,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
-
-
 
 }

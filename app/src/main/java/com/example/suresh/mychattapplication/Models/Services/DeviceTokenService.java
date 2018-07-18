@@ -13,6 +13,7 @@ public class DeviceTokenService extends FirebaseInstanceIdService {
     {
         onTokenRefresh();
     }
+
     @Override
     public void onTokenRefresh() {
 

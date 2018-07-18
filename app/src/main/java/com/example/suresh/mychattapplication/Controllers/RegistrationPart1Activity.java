@@ -7,7 +7,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class RegistrationPart1 extends AppCompatActivity implements View.OnClickListener,CommonActivity {
+public class RegistrationPart1Activity extends AppCompatActivity implements View.OnClickListener,CommonActivity {
 
     private View progressBar;
     private Button nextButton;
@@ -50,7 +49,7 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
     //wiring of controls from layout files to corresponding java control objects
 
     @Override
-    public void initializeControls(){
+    public void initializeViews(){
 
 
         //casting is necessary here
@@ -135,7 +134,7 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
 
         setTitle("User Registration");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initializeControls();
+        initializeViews();
 
     }
 
@@ -161,7 +160,7 @@ public class RegistrationPart1 extends AppCompatActivity implements View.OnClick
 
                          @Override
                         protected String doInBackground(HashMap<String, String>... hashMaps) {
-                            i=new Intent(RegistrationPart1.this,RegistrationPart2.class);
+                            i=new Intent(RegistrationPart1Activity.this,RegistrationPart2Activity.class);
                             hashMaps[0].put("fname",txtFname.getText().toString().trim());
                             hashMaps[0].put("lname",txtLname.getText().toString().trim());
                             hashMaps[0].put("DOB",yearList.getSelectedItem().toString()+"-"

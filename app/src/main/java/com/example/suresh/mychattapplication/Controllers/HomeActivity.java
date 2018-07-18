@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +22,6 @@ import com.example.suresh.mychattapplication.Controllers.Fragments.FragmentManag
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -30,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class HomePage extends AppCompatActivity implements CommonActivity {
+public class HomeActivity extends AppCompatActivity implements CommonActivity {
 
 
     private FirebaseDAO firebaseDAO;
@@ -46,15 +45,23 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
-        handleIntent(getIntent());
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_home_page);
+            handleIntent(getIntent());
+        }
+        catch (Exception e){
+            System.out.println("Exception caught : "+e.getMessage());
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
+        try {setIntent(intent);
+        handleIntent(intent);}
+        catch (Exception e){
+            System.out.println("Null pointer exception handled");
+        }
     }
 
     private void handleIntent(Intent intent) {
@@ -66,7 +73,7 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     }
 
     @Override
-    public void initializeControls() {
+    public void initializeViews() {
 
         //redundant but necessary statement
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
@@ -85,7 +92,7 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
 
         //method for creating and initializing list view and its operaitons
         configureListView();
-        adapter=new SearchViewListAdapter(HomePage.this,R.layout.list_item,userList);
+        adapter=new SearchViewListAdapter(HomeActivity.this,R.layout.list_item,userList);
         listView.setAdapter(adapter);
 
     }
@@ -188,7 +195,7 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
            //full name is required to rename the Appbar title of the user profile activity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent userProfileIntent=new Intent(HomePage.this,UserProfile.class);
+                Intent userProfileIntent=new Intent(HomeActivity.this,UserProfileActivity.class);
                 userProfileIntent.putExtra("targetUserID",((TextView)view.findViewById(R.id.uid)).getText());
                 userProfileIntent.putExtra("fullname",((TextView)view.findViewById(R.id.fullName)).getText());
                 userProfileIntent.putExtra("address",((TextView)view.findViewById(R.id.location)).getText());
@@ -209,14 +216,17 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     //method for creating menus
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.my_app_menu,menu);
-        MenuItem item=menu.findItem(R.id.searchTool);
+        try {
+            super.onCreateOptionsMenu(menu);
+            getMenuInflater().inflate(R.menu.my_app_menu, menu);
+            MenuItem item = menu.findItem(R.id.searchTool);
 
-        configureSearchViewInterface(menu,item);
-
-
-        return  true;
+            configureSearchViewInterface(menu, item);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
 
@@ -225,9 +235,9 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     protected void onStart() {
         super.onStart();
         if(getSupportActionBar()!=null){
-            getSupportActionBar().setTitle("My home");
+            getSupportActionBar().setTitle("MyChatt Appp home");
         }
-        initializeControls();
+        initializeViews();
     }
 
     //method to let know that textbox has gained focus
@@ -243,6 +253,9 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
     //event listener for menu item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item==null){
+            return false;
+        }
 
         super.onOptionsItemSelected(item);
 
@@ -254,35 +267,36 @@ public class HomePage extends AppCompatActivity implements CommonActivity {
 
             case R.id.logout:
 
-                    try {
-                        firebaseDAO.userLogOut();
-                        check=true;
-                    }
-                    catch (FirebaseException fe){
-                        Toast.makeText(HomePage.this,
-                                "Can't log right now please try again later",
-                                Toast.LENGTH_LONG).show();
-                        check=false;
-                    }
-                //to ensure that user is properly logged out
+                //removing event listener so that online status could be changed to false later
+                firebaseDAO.getDbReference().child("users")
+                        .child(FirebaseDAO.UID)
+                        .child("online")
+                        .removeEventListener(FirebaseDAO.valueEventListener);
 
-                if(check) {
+                //writing online status as false
+                firebaseDAO.getDbReference().child("users")
+                        .child(FirebaseDAO.UID)
+                        .child("online").setValue(false);
+
+
+                firebaseDAO.getAuthenticationObject().signOut();
+
 
                     firebaseDAO=null;
                     user=null;
                     //taking back to main activity
-                    Intent i = new Intent(HomePage.this, MainActivity.class);
+                    Intent i = new Intent(HomeActivity.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
-                }
+
                 break;
 
             case R.id.setting:
                 Toast.makeText(this,"sett clicked",Toast.LENGTH_LONG).show();
                 break;
             case R.id.myprofile:
-                startActivity(new Intent(HomePage.this,Profile.class));
+                startActivity(new Intent(HomeActivity.this,Profile.class));
                 break;
             default:
                     break;

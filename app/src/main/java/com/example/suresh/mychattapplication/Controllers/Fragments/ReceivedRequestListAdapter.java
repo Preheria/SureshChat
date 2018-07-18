@@ -88,12 +88,12 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
         uid.setText(user.getUserID());
         imageURI.setText(user.getPp_path());
 
-        if(user.getPp_path().equals("")){
+       // if(user.getPp_path().equals("")){
             thumbnail.setImageResource(R.drawable.ic_profile_male);
-        }
-        else{
-            Picasso.get().load(user.getPp_path()).into(thumbnail);
-        }
+        //}
+        //else{
+          //  Picasso.get().load(user.getPp_path()).into(thumbnail);
+        //}
 
 
         return view;

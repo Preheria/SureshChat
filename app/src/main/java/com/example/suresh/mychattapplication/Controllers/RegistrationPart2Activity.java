@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
 
-public class RegistrationPart2 extends AppCompatActivity implements View.OnClickListener,CommonActivity {
+public class RegistrationPart2Activity extends AppCompatActivity implements View.OnClickListener,CommonActivity {
 
 
     private User user;
@@ -45,21 +45,24 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
 
 
     @Override
-    public void initializeControls(){
+    public void initializeViews(){
+        try {
+            txtEmail = findViewById(R.id.email);
+            txtUsername = findViewById(R.id.username);
+            txtPassword1 = findViewById(R.id.password1);
+            txtPassword2 = findViewById(R.id.password2);
+            chkBox1 = findViewById(R.id.checkBoxConfirm);
+            progressBar = findViewById(R.id.progressBarRegActivity);
+            btnSignup = findViewById(R.id.signUpButton);
+            btnSignup.setOnClickListener(this);
+            consolidateView = findViewById(R.id.consolidateView);
 
-        txtEmail=findViewById(R.id.email);
-        txtUsername=findViewById(R.id.username);
-        txtPassword1=findViewById(R.id.password1);
-        txtPassword2=findViewById(R.id.password2);
-        chkBox1=findViewById(R.id.checkBoxConfirm);
-        progressBar=findViewById(R.id.progressBarRegActivity);
-        btnSignup=findViewById(R.id.signUpButton);
-        btnSignup.setOnClickListener(this);
-        consolidateView=findViewById(R.id.consolidateView);
-
-        //retrieving userregistration data from previous activity
-        userSignupData =(HashMap<String, String>) getIntent().getSerializableExtra("dataMap");
-
+            //retrieving userregistration data from previous activity
+            userSignupData = (HashMap<String, String>) getIntent().getSerializableExtra("dataMap");
+        }
+        catch (Exception e){
+            System.out.println("Exception Caught : "+e.getMessage());
+        }
     }
 
 
@@ -68,37 +71,36 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
     @Override
     public boolean validateFields(){
 
-        if(TextUtils.isEmpty(txtEmail.getText())) {
-            txtEmail.setError("Email is required");
-            return false;
-        }
-        else if(!txtEmail.getText().toString().contains("@")){
-            txtEmail.setError("Invalid Email");
-            return false;
-        }
-        else if(TextUtils.isEmpty(txtUsername.getText())) {
-            txtUsername.setError("Username required");
-            return false;
-        }
-        else if(TextUtils.isEmpty(txtPassword1.getText())){
-            txtPassword1.setError("Password is required");
-            return false;
-        }
-        else if(TextUtils.isEmpty(txtPassword2.getText())){
-            txtPassword2.setError("confirm password!");
-            return false;
-        }
-        else if(!txtPassword1.getText().toString().equals(txtPassword2.getText().toString())) {
-            txtPassword2.setError("Password not matched!");
-            return false;
-        }
-        else if(!chkBox1.isChecked()){
+        try {
+            if (TextUtils.isEmpty(txtEmail.getText())) {
+                txtEmail.setError("Email is required");
+                return false;
+            } else if (!txtEmail.getText().toString().contains("@")) {
+                txtEmail.setError("Invalid Email");
+                return false;
+            } else if (TextUtils.isEmpty(txtUsername.getText())) {
+                txtUsername.setError("Username required");
+                return false;
+            } else if (TextUtils.isEmpty(txtPassword1.getText())) {
+                txtPassword1.setError("Password is required");
+                return false;
+            } else if (TextUtils.isEmpty(txtPassword2.getText())) {
+                txtPassword2.setError("confirm password!");
+                return false;
+            } else if (!txtPassword1.getText().toString().equals(txtPassword2.getText().toString())) {
+                txtPassword2.setError("Password not matched!");
+                return false;
+            } else if (!chkBox1.isChecked()) {
 
-            Toast.makeText(this,"Please, select check box to confirm",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Please, select check box to confirm", Toast.LENGTH_LONG).show();
+                return false;
+            } else
+                return true;
+        }
+        catch (Exception e)
+        {
             return false;
         }
-        else
-            return true;
     }
 
     @Override
@@ -113,7 +115,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_registration_part2);
         setTitle("User Registration");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initializeControls();
+        initializeViews();
         }
 
     @SuppressLint("StaticFieldLeak")
@@ -174,8 +176,14 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
                                                 dbrf.child("pp_path").setValue("");
                                                 dbrf.child("status").setValue("Hello All! I am using Mychat App!");
 
+                                                firebaseDAO.getDbReference()
+                                                        .child("users")
+                                                        .child(FirebaseDAO.UID)
+                                                         .child("online")
+                                                        .addValueEventListener(FirebaseDAO.valueEventListener);
 
-                                                Intent i = new Intent(RegistrationPart2.this, HomePage.class);
+
+                                                Intent i = new Intent(RegistrationPart2Activity.this, HomeActivity.class);
                                                 i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
                                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(i);
@@ -186,7 +194,7 @@ public class RegistrationPart2 extends AppCompatActivity implements View.OnClick
                                                 progressBar.setVisibility(View.GONE);
                                                 consolidateView.setVisibility(View.VISIBLE);
                                                 firebaseDAO = null;
-                                                Toast.makeText(RegistrationPart2.this,
+                                                Toast.makeText(RegistrationPart2Activity.this,
                                                         task.getException().toString(),
                                                         Toast.LENGTH_SHORT
                                                 ).show();

@@ -1,32 +1,25 @@
 package com.example.suresh.mychattapplication.Models;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.suresh.mychattapplication.Controllers.HomePage;
-import com.example.suresh.mychattapplication.Controllers.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
-import java.util.concurrent.Executor;
-
-import static android.content.ContentValues.TAG;
 
 public class FirebaseDAO implements Serializable{
 
@@ -45,6 +38,28 @@ public class FirebaseDAO implements Serializable{
     //static firebaseDAO object and accor to the all the objects specified above
     private static FirebaseDAO firebaseDAOObject;
      public static String UID,CHAT_ID;
+
+    public static ValueEventListener valueEventListener=new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                getFirebaseDAOObject().getDbReference()
+                .child("users")
+                        .child(FirebaseDAO.UID)
+                        .child("online").onDisconnect().setValue(false);
+
+                getFirebaseDAOObject().getDbReference().child("users")
+                        .child(FirebaseDAO.UID)
+                        .child("online").setValue(true);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+    };
 
     public DatabaseReference getTokenReference() {
         return tokenReference;

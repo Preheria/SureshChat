@@ -3,7 +3,6 @@ package com.example.suresh.mychattapplication.Controllers.Fragments;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 public class FragmentManagerAdapter extends FragmentPagerAdapter {
 
@@ -17,11 +16,11 @@ public class FragmentManagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return new ActiveUsers();
+                return new ActiveUsersFragment();
             case 1:
-                return new Chats();
+                return new ChatsFragment();
             case 2:
-                return new FriendList();
+                return new FriendListFragment();
             default:
                 return null;
         }

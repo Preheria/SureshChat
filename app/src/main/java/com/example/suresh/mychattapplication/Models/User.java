@@ -22,6 +22,7 @@ public class User implements Serializable {
     private String pp_path = "";
     private String password;
     private String status = "";
+    private boolean online;
     private FirebaseDAO firebaseDAO;
 
     private boolean flag;
@@ -163,6 +164,14 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
     //end of getter and setter for the attributes from User class
 
     public User getUserInstance() {
@@ -175,7 +184,6 @@ public class User implements Serializable {
 
 
     public ArrayList<User> searchFriend(final String name, final ArrayList<User> userList) {
-
 
         firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
 

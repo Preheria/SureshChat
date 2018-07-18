@@ -321,5 +321,18 @@
     <string name="action_reply">Reply</string>
     <string name="call">call</string>
     <string name="initiateCall">handler for initiating call</string>
+    <string name="loginCredentials">login credentials</string>
+    <string name="strEmail">Email</string>
+    <string name="Username">Username</string>
+    <string name="strpass">Password</string>
+    <string name="strconfirmpassword">Confirm Password</string>
+    <string name="confirmStatement">Confirm details and Sign up</string>
+    <string name="strSignup">Signup</string>
+    <string name="descOnlineImageView">this shows online icon for currently logged in user</string>
+    <string name="user_name">User name</string>
+    <string name="last_message">last message</string>
+    <string name="last_date">last date</string>
+    <string name="description">description</string>
+    <string name="no_records_found">No records found</string>
 
 </resources>
