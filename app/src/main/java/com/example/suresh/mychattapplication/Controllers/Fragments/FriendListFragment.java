@@ -1,6 +1,5 @@
 package com.example.suresh.mychattapplication.Controllers.Fragments;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,15 +20,12 @@ import com.example.suresh.mychattapplication.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-
 
 public class FriendListFragment extends Fragment implements CommonActivity{
 
     private View parentView;
     private ListView friendList,receivedRequestList,sentRequestList;
-
     private ArrayList<User> friendsArray,friendRequestsArray,sentRequestsArray;
     private String[] strings;
     private String userID;
@@ -44,17 +40,14 @@ public class FriendListFragment extends Fragment implements CommonActivity{
     public FriendListFragment() {
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -78,27 +71,27 @@ public class FriendListFragment extends Fragment implements CommonActivity{
         loadReceivedRequests();
         loadSentFriendRequests();
         loadFriendsIntoList();
-
     }
 
     @Override
     public void initializeViews() {
 
-
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
         friendList= parentView.findViewById(R.id.friendLists);
         receivedRequestList= parentView.findViewById(R.id.receivedRequestLists);
         sentRequestList= parentView.findViewById(R.id.sentRequestLists);
-
         friendsArray=new ArrayList<>();
         friendRequestsArray=new ArrayList<>();
         sentRequestsArray=new ArrayList<>();
 
             FLAdapter = new FriendListAdapter(parentView.getContext(), R.layout.friend_item, friendsArray);
-            SRLAdapter=new SentRequestListAdapter(parentView.getContext(),R.layout.sent_request_item,sentRequestsArray);
-            RRLAdapter=new ReceivedRequestListAdapter(parentView.getContext(),R.layout.received_request_item,friendRequestsArray);
 
+            SRLAdapter=new SentRequestListAdapter(parentView.getContext(),
+                            R.layout.sent_request_item,sentRequestsArray);
 
+            RRLAdapter=new ReceivedRequestListAdapter(parentView.getContext(),
+                                                        R.layout.received_request_item,
+                                                        friendRequestsArray);
 
             friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,7 +99,6 @@ public class FriendListFragment extends Fragment implements CommonActivity{
                 TextView fullName=view.findViewById(R.id.fullNameFriendItem);
                 TextView uid=view.findViewById(R.id.uidFriendItem);
                 TextView imageURI=view.findViewById(R.id.IMAGE_URI_FriendItem);
-
                 Intent i=new Intent(getActivity(),ConversationActivity.class);
                 i.putExtra("fullname",fullName.getText());
                 i.putExtra("targetUserID",uid.getText());
@@ -114,7 +106,6 @@ public class FriendListFragment extends Fragment implements CommonActivity{
                 startActivity(i);
             }
         });
-
     }
 
     @Override
@@ -124,9 +115,7 @@ public class FriendListFragment extends Fragment implements CommonActivity{
 
     public void loadSentFriendRequests(){
         try {
-
             sentRequestsArray.clear();
-
             firebaseDAO.getDbReference()
                     .child("Requests")
                     .child(FirebaseDAO.UID)
@@ -154,7 +143,6 @@ public class FriendListFragment extends Fragment implements CommonActivity{
                                                             dataSnapshot.child("country").getValue(String.class),
                                                             dataSnapshot.child("state").getValue(String.class),
                                                             dataSnapshot.child("pp_path").getValue(String.class)
-
                                                     );
                                                     sentRequestsArray.add(user);
                                                     SRLAdapter.notifyDataSetChanged();
@@ -162,24 +150,20 @@ public class FriendListFragment extends Fragment implements CommonActivity{
 
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                                 }
                                             });
 
                                 }
                             } else {
-
                                 strings = new String[]{"No sent requests found"};
-                                optionalAdapter = new OptionalAdapter(parentView.getContext(), R.layout.no_records_found, strings);
+                                optionalAdapter = new OptionalAdapter(parentView.getContext(),
+                                        R.layout.no_records_found, strings);
                                 sentRequestList.setAdapter(optionalAdapter);
-
                             }
-
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
 
@@ -187,11 +171,9 @@ public class FriendListFragment extends Fragment implements CommonActivity{
         catch (Exception e){
             Log.e("Exception Caught",e.getMessage());
         }
-
     }
 
     public void loadReceivedRequests(){
-
         try {
             friendRequestsArray.clear();
 
@@ -217,12 +199,11 @@ public class FriendListFragment extends Fragment implements CommonActivity{
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                     User user = new User(
                                                             dataSnapshot.getKey(),
-                                                            dataSnapshot.child("fName").getValue(String.class),
-                                                            dataSnapshot.child("lName").getValue(String.class),
-                                                            dataSnapshot.child("country").getValue(String.class),
-                                                            dataSnapshot.child("state").getValue(String.class),
-                                                            dataSnapshot.child("pp_path").getValue(String.class)
-
+                                                        dataSnapshot.child("fName").getValue(String.class),
+                                                        dataSnapshot.child("lName").getValue(String.class),
+                                                        dataSnapshot.child("country").getValue(String.class),
+                                                        dataSnapshot.child("state").getValue(String.class),
+                                                        dataSnapshot.child("pp_path").getValue(String.class)
                                                     );
                                                     friendRequestsArray.add(user);
                                                     RRLAdapter.notifyDataSetChanged();
@@ -230,24 +211,20 @@ public class FriendListFragment extends Fragment implements CommonActivity{
 
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                                 }
                                             });
 
                                 }
                             } else {
-
                                 strings = new String[]{"No Friend requests"};
-                                optionalAdapter = new OptionalAdapter(parentView.getContext(), R.layout.no_records_found, strings);
+                                optionalAdapter = new OptionalAdapter(parentView.getContext(),
+                                        R.layout.no_records_found, strings);
                                 receivedRequestList.setAdapter(optionalAdapter);
-
                             }
-
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
         }
@@ -255,12 +232,9 @@ public class FriendListFragment extends Fragment implements CommonActivity{
         {
             Log.e("Exception Occured",e.getMessage());
         }
-
-
     }
 
     public void loadFriendsIntoList() {
-
         try {
             friendsArray.clear();
 
@@ -289,7 +263,6 @@ public class FriendListFragment extends Fragment implements CommonActivity{
                                                             dataSnapshot.child("country").getValue(String.class),
                                                             dataSnapshot.child("state").getValue(String.class),
                                                             dataSnapshot.child("pp_path").getValue(String.class)
-
                                                     );
                                                     friendsArray.add(user);
                                                     FLAdapter.notifyDataSetChanged();
@@ -297,20 +270,20 @@ public class FriendListFragment extends Fragment implements CommonActivity{
 
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                                 }
                                             });
                                 }
                             } else {
                                 strings = new String[]{"No Friends found"};
-                                optionalAdapter = new OptionalAdapter(parentView.getContext(), R.layout.no_records_found, strings);
+
+                                optionalAdapter = new OptionalAdapter(parentView.getContext(),
+                                        R.layout.no_records_found, strings);
                                 friendList.setAdapter(optionalAdapter);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
         }
@@ -319,5 +292,20 @@ public class FriendListFragment extends Fragment implements CommonActivity{
             Log.e("Exception Occured",e.getMessage());
         }
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

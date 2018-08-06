@@ -1,5 +1,4 @@
 package com.example.suresh.mychattapplication.Controllers;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,17 +26,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-
 public class HomeActivity extends AppCompatActivity implements CommonActivity {
-
 
     private FirebaseDAO firebaseDAO;
     private ViewPager viewPager;
     private FragmentManagerAdapter fp_adapter;
     private TabLayout tabLayout;
     private User user;
-
     private ArrayList<User> userList;
     private SearchViewListAdapter adapter;
     private ListView listView;
@@ -78,11 +73,8 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
         //redundant but necessary statement
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
         tabLayout=findViewById(R.id.mainTabLayout);
-
         viewPager=findViewById(R.id.homepageViewPager);
-
         fp_adapter=new FragmentManagerAdapter(getSupportFragmentManager());
-
         viewPager.setAdapter(fp_adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -101,7 +93,6 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         searchMenu.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -121,8 +112,6 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
                 return true;
             }
         });
-
-
 
         searchView = (SearchView) menu.findItem(R.id.searchTool).getActionView();
         searchView.setIconified(true);
@@ -153,8 +142,10 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot aChild:dataSnapshot.getChildren()
                                         ) {
-                                    if (!aChild.child("email").getValue(String.class).equalsIgnoreCase(firebaseDAO.getAuthenticationObject().getCurrentUser().getEmail())) {
-
+                                    if (!aChild.child("email")
+                                            .getValue(String.class)
+                                            .equalsIgnoreCase(firebaseDAO.getAuthenticationObject()
+                                                                .getCurrentUser().getEmail())) {
 
                                         User user = new User(
                                                 aChild.getKey(),
@@ -171,8 +162,6 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
                                 }
 
                                 }
-
-
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -206,12 +195,10 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
         });
     }
 
-
     @Override
     public boolean validateFields() {
         return false;
     }
-
 
     //method for creating menus
     @Override
@@ -228,8 +215,6 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
             return false;
         }
     }
-
-
 
     @Override
     protected void onStart() {
@@ -248,15 +233,12 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
         return super.onSearchRequested();
     }
 
-
-
     //event listener for menu item clicks
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item==null){
             return false;
         }
-
         super.onOptionsItemSelected(item);
 
         boolean check;
@@ -278,9 +260,7 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
                         .child(FirebaseDAO.UID)
                         .child("online").setValue(false);
 
-
                 firebaseDAO.getAuthenticationObject().signOut();
-
 
                     firebaseDAO=null;
                     user=null;
@@ -302,7 +282,7 @@ public class HomeActivity extends AppCompatActivity implements CommonActivity {
                     break;
         }
 
-
         return true;
     }
 }
+

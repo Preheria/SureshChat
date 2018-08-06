@@ -35,46 +35,33 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         extraBundle=getIntent().getExtras();
-
-
-        //setting app bar's titl
+        //setting app bar's title
         if(getSupportActionBar()!=null){
             getSupportActionBar().setTitle(extraBundle.getString("fullname")+"'s Profile");
         }
-
         initializeViews();
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
     public void initializeViews() {
-
         user=new User(extraBundle.getString("loggedInUserID"));
-
         ImageView imgProfileView = findViewById(R.id.imageViewOnProfile);
         TextView tvfullName = findViewById(R.id.NameOnProfile);
         TextView tvfullAddress = findViewById(R.id.AddressOnProfile);
         tvStatus=findViewById(R.id.StatusOnProfile);
-
         btnSendFriendRequest=findViewById(R.id.btnSendRequest);
         btnSendFriendRequest.setOnClickListener(this);
-
         btnSendMessage=findViewById(R.id.btnSendMessage);
         btnSendMessage.setOnClickListener(this);
 
         btnUnfriend=findViewById(R.id.btnUnFriend);
         btnUnfriend.setOnClickListener(this);
-
 
         //fullname address imageURI ,userID
         targetUserID=extraBundle.getString("targetUserID");
@@ -84,11 +71,10 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
             imgProfileView.setImageResource(R.drawable.ic_profile_male);
         }
         else{
-            Picasso.get().load(extraBundle.getString("imageURI")).placeholder(R.drawable.ic_profile_male).into(imgProfileView);
+            Picasso.get().load(extraBundle.getString("imageURI"))
+                    .placeholder(R.drawable.ic_profile_male).into(imgProfileView);
         }
-
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-
         //query to read status of the target user
         firebaseDAO.getDbReference()
                 .child("users")
@@ -107,7 +93,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
                 });
 
         checkFriendshipWithTagetUser();
-
     }
 
     @Override
@@ -137,12 +122,9 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
             default:
                 break;
         }
-
-
     }
 
     public void sendFriendRequest(){
-
         try {
             //this references inserts requests into target user's table
             firebaseDAO.getDbReference()
@@ -198,11 +180,9 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
         {
             System.out.println(e.getMessage()+ " Exception handled");
         }
-
     }
 
     public void checkFriendshipWithTagetUser(){
-
         try {
             //checking if the targetuser is already friend with the current user
             firebaseDAO.getDbReference()
@@ -214,7 +194,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.hasChildren()) {
-
                                 btnSendMessage.setText("Send Message");
                                 btnSendMessage.setVisibility(View.VISIBLE);
                                 btnUnfriend.setText("Unfriend");
@@ -225,13 +204,10 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
 
-
             //checking if request to the user is already sent
-
             firebaseDAO.getDbReference()
                     .child("Requests")
                     .child(user.getUserID())
@@ -242,7 +218,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.hasChild("status")) {
-
                                 btnSendFriendRequest.setText("Request Sent");
                                 btnSendFriendRequest.setVisibility(View.VISIBLE);
                             }
@@ -250,7 +225,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
 
@@ -266,22 +240,16 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.hasChild("status")) {
-
                                 btnSendFriendRequest.setText("Request Received");
                                 btnSendFriendRequest.setVisibility(View.VISIBLE);
                                 btnSendFriendRequest.setEnabled(false);
-
-
                             }
-
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
-
 
             if (TextUtils.isEmpty(btnSendFriendRequest.getText())) {
                 btnSendFriendRequest.setText("Send Request");
@@ -291,12 +259,9 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
         catch (Exception e){
             System.out.println(e.getMessage() +" Exception handled");
         }
-
     }
 
-
     public void unFriend(){
-
         try {
             //removing friend from current user's list
             firebaseDAO.getDbReference()
@@ -317,7 +282,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
                                         .addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                                                 if (dataSnapshot.hasChildren()) {
                                                     dataSnapshot.getRef().removeValue();
                                                     btnSendMessage.setVisibility(View.GONE);
@@ -329,7 +293,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                             }
                                         });
                             }
@@ -345,7 +308,6 @@ public class UserProfileActivity extends AppCompatActivity implements CommonActi
         {
             System.out.println(e.getMessage());
         }
-
     }
 
     @Override

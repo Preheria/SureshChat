@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class FragmentManagerAdapter extends FragmentPagerAdapter {
 
-
     public FragmentManagerAdapter(FragmentManager fm)  {
         super(fm);
     }
@@ -44,3 +43,14 @@ public class FragmentManagerAdapter extends FragmentPagerAdapter {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+

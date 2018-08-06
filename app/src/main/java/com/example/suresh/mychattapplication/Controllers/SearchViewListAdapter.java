@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,7 +21,6 @@ public class SearchViewListAdapter extends ArrayAdapter<User> {
     private Context context;
     private int resource;
     private ArrayList<User> userList;
-
 
     public SearchViewListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull ArrayList<User> userList) {
         super(context,resource,userList);
@@ -65,7 +62,21 @@ public class SearchViewListAdapter extends ArrayAdapter<User> {
             Picasso.get().load(user.getPp_path()).into(thumbnail);
         }
 
-
         return view;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

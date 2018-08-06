@@ -1,6 +1,4 @@
 package com.example.suresh.mychattapplication.Controllers.Fragments;
-
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
 import com.example.suresh.mychattapplication.Controllers.CommonActivity;
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.R;
@@ -21,22 +18,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ChatsFragment extends Fragment implements CommonActivity{
 
-
     //varibale declarations
-    
     private View parentView;
     private ListView chatlistView;
     private FirebaseDAO firebaseDAO;
     private ChatListAdapter chatListAdapter;
     private OptionalAdapter optionalAdapter;
     private ArrayList<HashMap<String,String>> chatItemsList;
-    
-    
+
     public ChatsFragment() {
         // Required empty public constructor
     }
@@ -44,9 +35,7 @@ public class ChatsFragment extends Fragment implements CommonActivity{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,7 +43,6 @@ public class ChatsFragment extends Fragment implements CommonActivity{
         // Inflate the layout for this fragment
         try{
         parentView=inflater.inflate(R.layout.fragment_chats, container, false);
-
         return parentView;}
         catch ( Exception e)
         {
@@ -73,23 +61,16 @@ public class ChatsFragment extends Fragment implements CommonActivity{
         super.onResume();
     }
 
-
     @Override
     public void initializeViews() {
         
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-
         chatlistView=parentView.findViewById(R.id.chatListView);
         chatItemsList=new ArrayList<>();
-
         chatListAdapter=new ChatListAdapter(parentView.getContext(),R.layout.single_chat_item,chatItemsList);
-
-
         String[] strings= new String[]{"No recent chats !"};
         optionalAdapter=new OptionalAdapter(parentView.getContext(),R.layout.no_records_found,strings);
-
         loadChats();
-
     }
 
     public void loadChats() {
@@ -111,28 +92,24 @@ public class ChatsFragment extends Fragment implements CommonActivity{
 
                                         HashMap<String, String> chatItemData = new HashMap<>();
 
-                                        chatItemData.put("lastAccessedOn", eachItem.child("lastAccessedOn").getValue(String.class));
-                                        chatItemData.put("lastMessage", eachItem.child("lastMessage").getValue(String.class));
-                                        chatItemData.put("sender", eachItem.child("sender").getValue(String.class));
-                                        chatItemData.put("receiver", eachItem.child("receiver").getValue(String.class));
-                                        chatItemData.put("targetUserID", eachItem.getKey());
+                    chatItemData.put("lastAccessedOn", eachItem.child("lastAccessedOn").getValue(String.class));
+                    chatItemData.put("lastMessage", eachItem.child("lastMessage").getValue(String.class));
+                    chatItemData.put("sender", eachItem.child("sender").getValue(String.class));
+                    chatItemData.put("receiver", eachItem.child("receiver").getValue(String.class));
+                    chatItemData.put("targetUserID", eachItem.getKey());
 
-                                        chatItemsList.add(chatItemData);
-                                        chatListAdapter.notifyDataSetChanged();
+                    chatItemsList.add(chatItemData);
+                    chatListAdapter.notifyDataSetChanged();
                                     }
                                 }
 
                             } else {
                                 chatlistView.setAdapter(optionalAdapter);
-
                             }
-
                         }
-
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
         }
@@ -147,3 +124,19 @@ public class ChatsFragment extends Fragment implements CommonActivity{
         return false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

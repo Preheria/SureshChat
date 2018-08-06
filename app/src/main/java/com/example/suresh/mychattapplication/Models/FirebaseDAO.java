@@ -41,9 +41,8 @@ public class FirebaseDAO implements Serializable{
 
     public static ValueEventListener valueEventListener=new ValueEventListener() {
 
-            @Override
+        @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 getFirebaseDAOObject().getDbReference()
                 .child("users")
                         .child(FirebaseDAO.UID)
@@ -52,12 +51,10 @@ public class FirebaseDAO implements Serializable{
                 getFirebaseDAOObject().getDbReference().child("users")
                         .child(FirebaseDAO.UID)
                         .child("online").setValue(true);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
     };
 
@@ -149,18 +146,18 @@ public class FirebaseDAO implements Serializable{
     }
 
     private void insertUser(User userInstance){
-        getDbReference().child("users").child(userInstance.getUserID()).child("fName").setValue(userInstance.getFirstName());
-        getDbReference().child("users").child(userInstance.getUserID()).child("lName").setValue(userInstance.getLastName());
-        getDbReference().child("users").child(userInstance.getUserID()).child("DOB").setValue(userInstance.getDOB());
-        getDbReference().child("users").child(userInstance.getUserID()).child("country").setValue(userInstance.getCountry());
-        getDbReference().child("users").child(userInstance.getUserID()).child("state").setValue(userInstance.getState());
-        getDbReference().child("users").child(userInstance.getUserID()).child("homeAddress").setValue(userInstance.getHomeAddress());
-        getDbReference().child("users").child(userInstance.getUserID()).child("phone").setValue(userInstance.getPhone());
-        getDbReference().child("users").child(userInstance.getUserID()).child("email").setValue(userInstance.getEmail());
-        getDbReference().child("users").child(userInstance.getUserID()).child("password").setValue(userInstance.getPassword());
-        getDbReference().child("users").child(userInstance.getUserID()).child("username").setValue(userInstance.getUsername());
-        getDbReference().child("users").child(userInstance.getUserID()).child("status").setValue("Hello All! I am using Mychat App!");
-        getDbReference().child("users").child(userInstance.getUserID()).child("pp_path").setValue("");
+getDbReference().child("users").child(userInstance.getUserID()).child("fName").setValue(userInstance.getFirstName());
+getDbReference().child("users").child(userInstance.getUserID()).child("lName").setValue(userInstance.getLastName());
+getDbReference().child("users").child(userInstance.getUserID()).child("DOB").setValue(userInstance.getDOB());
+getDbReference().child("users").child(userInstance.getUserID()).child("country").setValue(userInstance.getCountry());
+getDbReference().child("users").child(userInstance.getUserID()).child("state").setValue(userInstance.getState());
+getDbReference().child("users").child(userInstance.getUserID()).child("homeAddress").setValue(userInstance.getHomeAddress());
+getDbReference().child("users").child(userInstance.getUserID()).child("phone").setValue(userInstance.getPhone());
+getDbReference().child("users").child(userInstance.getUserID()).child("email").setValue(userInstance.getEmail());
+getDbReference().child("users").child(userInstance.getUserID()).child("password").setValue(userInstance.getPassword());
+getDbReference().child("users").child(userInstance.getUserID()).child("username").setValue(userInstance.getUsername());
+getDbReference().child("users").child(userInstance.getUserID()).child("status").setValue("Hello All! I am using Mychat App!");
+getDbReference().child("users").child(userInstance.getUserID()).child("pp_path").setValue("");
 
     }
 
@@ -180,7 +177,6 @@ public class FirebaseDAO implements Serializable{
                         }
                     }
                 });
-        Log.d("*____________FLAG_____*",""+flag);
         return flag;
 
     }
@@ -200,21 +196,17 @@ public class FirebaseDAO implements Serializable{
                             userInstance.setUserID(getFirebaseUser().getUid());
                             // Sign in success, update UI with the signed-in user's information
                             insertUser(userInstance);
-
                             flag=true;
                         } else {
                             // If sign in fails, display a message to the user.
                             //Log.w("failure", task.getException());
                             flag=false;
                         }
-
-                        // ...
                     }
                 });
 
         return flag;
     }
-
 
     public void saveDeviceTokens(final Context context, String uid, String token){
         tokenReference.child(uid).child("deviceToken").setValue(token)
@@ -233,5 +225,4 @@ public class FirebaseDAO implements Serializable{
             }
         });
     }
-
 }

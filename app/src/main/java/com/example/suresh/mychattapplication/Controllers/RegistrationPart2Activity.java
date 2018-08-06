@@ -23,11 +23,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DatabaseReference;
-
 import java.util.HashMap;
 
 public class RegistrationPart2Activity extends AppCompatActivity implements View.OnClickListener,CommonActivity {
-
 
     private User user;
     private FirebaseDAO firebaseDAO;
@@ -43,7 +41,6 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
     private HashMap<String ,String> userSignupData;
     private Button btnSignup;
 
-
     @Override
     public void initializeViews(){
         try {
@@ -56,7 +53,6 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
             btnSignup = findViewById(R.id.signUpButton);
             btnSignup.setOnClickListener(this);
             consolidateView = findViewById(R.id.consolidateView);
-
             //retrieving userregistration data from previous activity
             userSignupData = (HashMap<String, String>) getIntent().getSerializableExtra("dataMap");
         }
@@ -64,9 +60,6 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
             System.out.println("Exception Caught : "+e.getMessage());
         }
     }
-
-
-
 
     @Override
     public boolean validateFields(){
@@ -106,8 +99,7 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
     @Override
     protected void onStart(){
         super.onStart();
-
-    }
+        }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +120,7 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
 
                     progressBar.setVisibility(View.VISIBLE);
                     consolidateView.setVisibility(View.GONE);
-
                     new AsyncTask<String, Void, Boolean>() {
-
                         @Override
                         protected Boolean doInBackground(String... strings) {
 
@@ -151,16 +141,15 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
                                             if (task.isSuccessful()) {
 
                                                 String token=(new DeviceTokenService()).getRefreshedToken();
-                                                Log.e("****TOKen",token);
                                                 firebaseDAO.saveDeviceTokens(getApplicationContext(),
                                                         firebaseDAO.getAuthenticationObject().getCurrentUser().getUid(),
                                                         token
                                                 );
-
+                                            FirebaseDAO.UID=firebaseDAO.getAuthenticationObject().getCurrentUser().getUid();
                                                 //establising reference to database
-                                                DatabaseReference dbrf=firebaseDAO.getDbReference()
-                                                        .child("users")
-                                                        .child(firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
+                                    DatabaseReference dbrf=firebaseDAO.getDbReference()
+                                            .child("users")
+                                            .child(firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
 
                                                 //inserting user data
                                                 dbrf.child("fName").setValue(userSignupData.get("fname"));
@@ -175,22 +164,18 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
                                                 dbrf.child("password").setValue(userSignupData.get("password"));
                                                 dbrf.child("pp_path").setValue("");
                                                 dbrf.child("status").setValue("Hello All! I am using Mychat App!");
-
                                                 firebaseDAO.getDbReference()
                                                         .child("users")
                                                         .child(FirebaseDAO.UID)
                                                          .child("online")
                                                         .addValueEventListener(FirebaseDAO.valueEventListener);
-
-
-                                                Intent i = new Intent(RegistrationPart2Activity.this, HomeActivity.class);
-                                                i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
-                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(i);
-                                                finish();
+                            Intent i = new Intent(RegistrationPart2Activity.this, HomeActivity.class);
+                            i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
                                             }
                                             else {
-
                                                 progressBar.setVisibility(View.GONE);
                                                 consolidateView.setVisibility(View.VISIBLE);
                                                 firebaseDAO = null;
@@ -198,25 +183,16 @@ public class RegistrationPart2Activity extends AppCompatActivity implements View
                                                         task.getException().toString(),
                                                         Toast.LENGTH_SHORT
                                                 ).show();
-
                                             }
-
                                         }
                                     });
                             return true;
-
                         }
-
                         @Override
                         protected void onPostExecute(Boolean aBoolean) {
                         }
-
-
                     }.execute("start");
-
-
                 }
-
                 break;
             default:
                 break;

@@ -1,6 +1,5 @@
 package com.example.suresh.mychattapplication.Controllers.Fragments;
 
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.suresh.mychattapplication.R;
-
 import java.util.ArrayList;
 
 public class OptionalAdapter extends ArrayAdapter<String> {
@@ -37,10 +34,21 @@ public class OptionalAdapter extends ArrayAdapter<String> {
 
         //each item will be written as a view which needs to be returned
         final View view=inflater.inflate(resource,null);
-
         TextView tvDefault=view.findViewById(R.id.RNFTextView);
         tvDefault.setText(strings[position]);
 
         return view;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

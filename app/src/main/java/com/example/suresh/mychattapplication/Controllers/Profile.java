@@ -1,5 +1,4 @@
 package com.example.suresh.mychattapplication.Controllers;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -76,35 +75,25 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-
                     tvFullname.setText(dataSnapshot.child("fName").getValue(String.class)+" "
                             +dataSnapshot.child("lName").getValue(String.class)
                     );
-
                     tvUsername.setText(dataSnapshot.child("username").getValue(String.class));
-
                     tvStatus.setText(dataSnapshot.child("status").getValue(String.class));
-
                     tvEmail.setText(dataSnapshot.child("email").getValue(String.class));
-
                     tvPhone.setText(dataSnapshot.child("phone").getValue(String.class));
-
                     tvAddress.setText(dataSnapshot.child("country").getValue(String.class)
                             +" "+dataSnapshot.child("state").getValue(String.class)
                             +" "+dataSnapshot.child("homeAddress").getValue(String.class)
 
                     );
-
                     tvFriendCount.setText(tvFriendCount.getText());
-
                     if(dataSnapshot.child("pp_path").getValue(String.class).equals("")){
                         profilePic.setImageResource(R.drawable.ic_profile_male);
                     }
                     else{
                         Picasso.get().load(dataSnapshot.child("pp_path").getValue().toString()).into(profilePic);
                     }
-
             }
 
             @Override
@@ -112,11 +101,9 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
             }
         });
-
     }
 
     public void loadDataIntoControls(){
-
     }
 
     @Override
@@ -136,9 +123,6 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
 
             default:
                     break;
-
-
-
         }
     }
 
@@ -149,8 +133,6 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
-
-
                     firebaseDAO.getStorageReference()
                             .child("profile_pictures")
                             .child(user.getUserID())
@@ -167,7 +149,9 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
                                         firebaseDAO.getStorageReference()
                                                 .child("profile_pictures")
                                                 .child(user.getUserID())
-                                                .child(user.getUserID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                .child(user.getUserID())
+                                                .getDownloadUrl()
+                                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
 
@@ -181,7 +165,9 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
                                             }
                                         });
                                     } else {
-                                        Toast.makeText(Profile.this, "some error occured.please try again later", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Profile.this,
+                                                "some error occured.please try again later",
+                                                Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
@@ -195,5 +181,22 @@ public class Profile extends AppCompatActivity implements CommonActivity, View.O
             System.out.println("Exception Caught :"+e.getMessage());
         }
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

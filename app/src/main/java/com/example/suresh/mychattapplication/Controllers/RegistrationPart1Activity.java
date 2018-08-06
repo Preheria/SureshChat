@@ -11,12 +11,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-
 import com.example.suresh.mychattapplication.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class RegistrationPart1Activity extends AppCompatActivity implements View.OnClickListener,CommonActivity {
 
@@ -45,15 +42,11 @@ public class RegistrationPart1Activity extends AppCompatActivity implements View
 
     protected Intent i;
 
-
     //wiring of controls from layout files to corresponding java control objects
 
     @Override
     public void initializeViews(){
-
-
         //casting is necessary here
-
         txtFname=findViewById(R.id.firstName);
         txtLname=findViewById(R.id.lastName);
         dataPart1=new HashMap<>();
@@ -61,7 +54,6 @@ public class RegistrationPart1Activity extends AppCompatActivity implements View
         yearList=findViewById(R.id.spin_year);
         monthList=findViewById(R.id.spin_month);
         dayList=findViewById(R.id.spin_day);
-
         txtstate=findViewById(R.id.address);
         txtHomeAddress=findViewById(R.id.homeAddress);
         txtPhone=findViewById(R.id.phone);
@@ -131,32 +123,26 @@ public class RegistrationPart1Activity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_part1);
-
         setTitle("User Registration");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initializeViews();
-
-    }
-
+        }
 
     @Override
     protected void onResume(){
         super.onResume();
-
         regFrom.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-
     }
 
     @Override
     public void onClick(View v) {
 
                 if(validateFields()){
-
                     regFrom.setVisibility(View.GONE);
                     progressBar.setVisibility(View.VISIBLE);
                     @SuppressLint("StaticFieldLeak")
-                     AsyncTask<HashMap<String ,String >,Void,String> task1=new AsyncTask<HashMap<String ,String >,Void,String> (){
+             AsyncTask<HashMap<String ,String >,Void,String> task1=new AsyncTask<HashMap<String ,String >,Void,String> (){
 
                          @Override
                         protected String doInBackground(HashMap<String, String>... hashMaps) {
@@ -176,7 +162,6 @@ public class RegistrationPart1Activity extends AppCompatActivity implements View
                             return "ok";
                         }
 
-
                         @Override
                         protected void onPreExecute(){
                         }
@@ -188,10 +173,24 @@ public class RegistrationPart1Activity extends AppCompatActivity implements View
                     };
 
                     task1.execute(dataPart1);
-
                 }
             }
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

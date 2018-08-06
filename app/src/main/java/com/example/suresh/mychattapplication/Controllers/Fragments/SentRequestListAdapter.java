@@ -38,14 +38,11 @@ public class SentRequestListAdapter extends ArrayAdapter<User>{
         firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
     }
 
-
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
 
-
         LayoutInflater inflater=LayoutInflater.from(context);
-
         //each item will be written as a view which needs to be returned
         final View view=inflater.inflate(resource,null);
         Button cancelButton=view.findViewById(R.id.btnCancel);
@@ -71,17 +68,14 @@ public class SentRequestListAdapter extends ArrayAdapter<User>{
         else{
             Picasso.get().load(user.getPp_path()).into(thumbnail);
         }
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 view.setVisibility(View.GONE);
                 removeFriendRequest(uid.getText().toString());
                 userlist.remove(position);
-
             }
         });
-
         return view;
     }
 
@@ -119,10 +113,9 @@ public class SentRequestListAdapter extends ArrayAdapter<User>{
 
                                  @Override
                                  public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(context,"Request could not be deleted right now",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Request could not be deleted right now",Toast.LENGTH_SHORT).show();
                                  }
                              });
-
                  }
              }
 
@@ -135,3 +128,14 @@ public class SentRequestListAdapter extends ArrayAdapter<User>{
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+

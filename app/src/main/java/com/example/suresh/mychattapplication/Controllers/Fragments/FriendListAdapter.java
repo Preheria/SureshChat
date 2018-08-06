@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.example.suresh.mychattapplication.Models.User;
 import com.example.suresh.mychattapplication.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendListAdapter extends ArrayAdapter<User> {
@@ -33,7 +31,6 @@ public class FriendListAdapter extends ArrayAdapter<User> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
 
         LayoutInflater inflater=LayoutInflater.from(context);
 
@@ -62,8 +59,24 @@ public class FriendListAdapter extends ArrayAdapter<User> {
         else{
             Picasso.get().load(user.getPp_path()).into(thumbnail);
         }
-
-
         return view;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

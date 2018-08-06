@@ -218,9 +218,7 @@
                     android:textSize="20sp"
                     />
 
-
             </android.support.design.widget.TextInputLayout>
-
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -257,3 +255,8 @@
     </ScrollView>
 
 </LinearLayout>
+
+
+
+
+

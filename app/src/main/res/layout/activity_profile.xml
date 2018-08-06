@@ -10,8 +10,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="172dp"
-        android:layout_height="261dp"
+        android:layout_width="132dp"
+        android:layout_height="195dp"
         android:layout_marginBottom="9dp"
         android:layout_marginEnd="6dp"
         android:layout_marginStart="26dp"
@@ -29,31 +29,29 @@
 
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_image"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_width="113dp"
+            android:layout_height="140dp"
             android:paddingBottom="5dp"
             android:src="@drawable/ic_profile_male"
             app:civ_border_color="#9f9f9f"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
 
         <Button
-            android:layout_width="150dp"
-            android:layout_height="55dp"
             android:id="@+id/btnImgUpload"
-            android:textColor="@color/white"
-            android:paddingLeft="5dp"
-            android:textSize="15sp"
-            android:text="Change picture"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
             android:background="@color/black"
-            />
+            android:paddingLeft="5dp"
+            android:text="Change picture"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="190dp"
+        android:layout_width="172dp"
         android:layout_height="201dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="36dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -101,7 +99,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="279dp"
+        android:layout_width="232dp"
         android:layout_height="226dp"
         android:layout_marginBottom="44dp"
         android:layout_marginEnd="88dp"

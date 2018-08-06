@@ -11,14 +11,11 @@ import com.example.suresh.mychattapplication.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-
 public class MyAppNotificationService extends FirebaseMessagingService {
-
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
 
         //getting notification data from the message payload
         String notificationTitle=remoteMessage.getNotification().getTitle();
@@ -38,23 +35,20 @@ public class MyAppNotificationService extends FirebaseMessagingService {
                 targetIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-
         //setting up parameters for notification to be shown
         NotificationCompat.Builder notification=new NotificationCompat.Builder(this,"chanel1")
-                                                .setSmallIcon(R.mipmap.ic_launcher_background)
-                                                .setContentTitle(notificationTitle)
-                                                .setContentText(notificationBody)
-                                                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                                                .setContentIntent(pendingIntent);
-
+                                    .setSmallIcon(R.mipmap.ic_launcher_background)
+                                    .setContentTitle(notificationTitle)
+                                    .setContentText(notificationBody)
+                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                    .setContentIntent(pendingIntent);
 
         //invoking notification setup above
-
-        NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager= (NotificationManager) getSystemService(
+                                                            Context.NOTIFICATION_SERVICE);
 
         if(notificationManager!=null) {
             notificationManager.notify((int) System.currentTimeMillis(), notification.build());
             }
-
     }
 }

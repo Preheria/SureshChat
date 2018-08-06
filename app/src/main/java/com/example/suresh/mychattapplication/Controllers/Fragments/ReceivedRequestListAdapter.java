@@ -25,14 +25,11 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
-
 
     private  Context context;
     private int resource;
     private FirebaseDAO firebaseDAO;
-
     private ArrayList<User> userlist;
 
      ReceivedRequestListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<User> userList) {
@@ -42,13 +39,11 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
         this.resource=resource;
         this.userlist=userList;
          firebaseDAO=FirebaseDAO.getFirebaseDAOObject();
-
     }
 
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
 
         final int pos=position;
          LayoutInflater inflater=LayoutInflater.from(context);
@@ -77,8 +72,6 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
              declineRequest(uid.getText().toString(),pos);
             }
         });
-
-
         //getting a user at a particular index
         User user=userlist.get(position);
 
@@ -94,11 +87,8 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
         //else{
           //  Picasso.get().load(user.getPp_path()).into(thumbnail);
         //}
-
-
         return view;
     }
-
 
     //function for accepting friend reqest
     private void acceptRequest(final String targetUSerId,final int position) {
@@ -128,8 +118,8 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                                     if(dataSnapshot.hasChildren())
                                     {
 
-                                        //coming up to this point, it is confirmed that request data exists in both sender's log and receiver's log
-                                        //therefore now registering as friends to eachother
+    //coming up to this point, it is confirmed that request data exists in both sender's log and receiver's log
+    //therefore now registering as friends to eachother
                                         firebaseDAO.getDbReference()
                                                 .child("FriendLists")
                                                 .child(FirebaseDAO.UID)
@@ -154,25 +144,20 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                                                                        if(task.isSuccessful()){
                                                                            userlist.remove(position);
                                                                        }
-
                                                                         }
                                                                     });
                                                         }
-
                                                     }
                                                 });
                                     }
-
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
                                 }
                             });
-
                 }
-
             }
 
             @Override
@@ -180,9 +165,7 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                 Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
             }
         });
-
         updateRequestList(targetUSerId);
-
     }
 
     //function for removing requests from request log after request is accepted or declined
@@ -197,9 +180,6 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                 if(dataSnapshot.hasChildren())
                 {
                     dataSnapshot.getRef().removeValue();
-
-
-
                 }
             }
 
@@ -223,18 +203,13 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                         if(dataSnapshot.hasChildren())
                         {
                             dataSnapshot.getRef().removeValue();
-
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
-
-
-
     }
 
 
@@ -268,17 +243,15 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                                     {
                                         dataSnapshot.getRef().removeValue();
                                         userlist.remove(position);
-
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
                                 }
                             });
-
-                }
+                    }
             }
 
             @Override
@@ -286,8 +259,5 @@ public class ReceivedRequestListAdapter extends ArrayAdapter<User>{
                 Toast.makeText(context,"Request could not be canceled right now",Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
-
 }

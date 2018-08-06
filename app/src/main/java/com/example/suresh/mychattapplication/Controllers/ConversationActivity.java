@@ -25,7 +25,6 @@ import java.util.HashMap;
 import co.intentservice.chatui.ChatView;
 import co.intentservice.chatui.models.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ConversationActivity extends AppCompatActivity implements CommonActivity, View.OnClickListener{
 
     private ChatView chatView ;
@@ -33,7 +32,6 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
     private ImageButton btnBack;
     private FirebaseDAO firebaseDAO;
     private CircleImageView circleImageView;
-
 
     private String targetUserID,imageURI,fullname;
 
@@ -51,7 +49,6 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
         }
 
     }
-
 
     @Override
     protected void onStart() {
@@ -71,13 +68,9 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
         {
             Picasso.get().load(imageURI).placeholder(R.drawable.ic_profile_male).into(circleImageView);
         }
-
         initializeViews();
         checkForExistingConversation();
-
         loadMessages();
-
-
     }
 
     @Override
@@ -88,10 +81,7 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
 
         btnBack=findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-
         chatView=findViewById(R.id.chat_view);
-
-
         chatView.setOnSentMessageListener(new ChatView.OnSentMessageListener(){
             @Override
             public boolean sendMessage(ChatMessage chatMessage){
@@ -111,7 +101,8 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
                         .setValue(message);
 
                 //setting last date
-                DatabaseReference msgDbref=firebaseDAO.getDbReference().child("ConversationLogs").child(FirebaseDAO.UID).child(targetUserID);
+                DatabaseReference msgDbref=firebaseDAO.getDbReference()
+                                                        .child("ConversationLogs").child(FirebaseDAO.UID).child(targetUserID);
 
                 //writing copy of last message inside conversation log of sender
                 msgDbref.child("lastAccessedOn").setValue(String.valueOf(chatMessage.getTimestamp()));
@@ -119,17 +110,15 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
                 msgDbref.child("sender").setValue(FirebaseDAO.UID);
                 msgDbref.child("receiver").setValue(targetUserID);
 
-
-                msgDbref=firebaseDAO.getDbReference().child("ConversationLogs").child(targetUserID).child(FirebaseDAO.UID);
+                msgDbref=firebaseDAO.getDbReference()
+                                    .child("ConversationLogs")
+                                    .child(targetUserID).child(FirebaseDAO.UID);
 
                 //writing the copy of the same message to conversation log of receiver
                 msgDbref.child("lastAccessedOn").setValue(String.valueOf(chatMessage.getTimestamp()));
                 msgDbref.child("lastMessage").setValue(String.valueOf(chatMessage.getMessage()));
                 msgDbref.child("sender").setValue(FirebaseDAO.UID);
                 msgDbref.child("receiver").setValue(targetUserID);
-
-
-
                 return true;
             }
         });
@@ -151,7 +140,6 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
     public boolean validateFields() {
         return false;
     }
-
 
     public void checkForExistingConversation(){
 
@@ -198,7 +186,6 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
 
                         }
 
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -211,23 +198,20 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
         }
     }
 
-
     public void loadMessages(){
 
         try {
-
             firebaseDAO.getDbReference().child("ConversationLogs")
                     .child(FirebaseDAO.UID)
                     .child(targetUserID)
-                    .child("chatID")
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            String chatID = dataSnapshot.getValue(String.class);
+                            String chatID = dataSnapshot.child("chatID").getValue(String.class);
 
                             firebaseDAO.getDbReference().child("Messages")
-                                    .child(chatID)
+                                    .child(FirebaseDAO.CHAT_ID)
                                     .orderByKey()
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
@@ -237,27 +221,24 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
 
                                             for (DataSnapshot eachMessage : dataSnapshot.getChildren()) {
                                                 if (eachMessage.getChildrenCount() > 1) {
-                                                    String message = eachMessage.child("message").getValue(String.class);
-                                                    String timeStamp = eachMessage.child("timestamp").getValue(String.class);
-                                                    String senderId = eachMessage.child("sender").getValue(String.class);
+                                            String message = eachMessage.child("message").getValue(String.class);
+                                            String timeStamp = eachMessage.child("timestamp").getValue(String.class);
+                                            String senderId = eachMessage.child("sender").getValue(String.class);
 
-                                                    ChatMessage chatMessage;
+                                                ChatMessage chatMessage;
 
-                                                    if (senderId.equals(FirebaseDAO.UID)) {
-                                                        chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.SENT);
+                                                if (senderId.equals(FirebaseDAO.UID)) {
+                                chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.SENT);
                                                     } else {
-                                                        chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.RECEIVED);
+                                chatMessage = new ChatMessage(message, Long.parseLong(timeStamp), ChatMessage.Type.RECEIVED);
                                                     }
                                                     chatView.addMessage(chatMessage);
                                                 }
                                             }
-
-
                                         }
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                         }
                                     });
                         }
@@ -273,8 +254,6 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
             Log.e("Error","Message Loading failed");
         }
     }
-
-
 
     @Override
     public void onClick(View v) {
@@ -293,3 +272,7 @@ public class ConversationActivity extends AppCompatActivity implements CommonAct
 
     }
 }
+
+
+
+

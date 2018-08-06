@@ -1,11 +1,9 @@
 package com.example.suresh.mychattapplication.Models;
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,14 +22,12 @@ public class User implements Serializable {
     private String status = "";
     private boolean online;
     private FirebaseDAO firebaseDAO;
-
     private boolean flag;
     private DataSnapshot ds;
 
     //default constructor is required
     public User() {
     }
-
     public User(String userID,String fName, String lname, String country, String state, String pp_path) {
         this.userID=userID;
         firstName = fName;
@@ -56,137 +52,101 @@ public class User implements Serializable {
         this.email = userdata.get("email");
         this.username = userdata.get("username");
         this.password = userdata.get("password");
-
-
     }
 
     public String getPp_path() {
         return pp_path;
     }
-
     public void setPp_path(String pp_path) {
         this.pp_path = pp_path;
     }
-
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getDOB() {
         return DOB;
     }
-
     public void setDOB(String DOB) {
         this.DOB = DOB;
     }
-
     public String getCountry() {
         return country;
     }
-
     public void setCountry(String country) {
         this.country = country;
     }
-
     public String getState() {
         return state;
     }
-
     public void setState(String state) {
         this.state = state;
     }
-
     public String getHomeAddress() {
         return homeAddress;
     }
-
     public void setHomeAddress(String homeAddress) {
         this.homeAddress = homeAddress;
     }
-
     public String getUserID() {
         return userID;
     }
-
     public void setUserID(String userID) {
         this.userID = userID;
     }
-
     public boolean isOnline() {
         return online;
     }
-
     public void setOnline(boolean online) {
         this.online = online;
     }
-
     //end of getter and setter for the attributes from User class
-
     public User getUserInstance() {
         return this; //returns the instance of class itself
     }
-
     public void insertUser() {
-
     }
 
-
     public ArrayList<User> searchFriend(final String name, final ArrayList<User> userList) {
-
         firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
-
         firebaseDAO.getDbReference()
                     .child("users")
                     .orderByChild("fName")
@@ -199,31 +159,38 @@ public class User implements Serializable {
                             for (DataSnapshot aChild:dataSnapshot.getChildren()
                                  ) {
                                 if ((aChild.child("fName").getValue(String.class)).contains(name)) {
-
-
-                                User user = new User(
+                                    User user = new User(
                                         aChild.getKey(),
                                         aChild.child("fName").getValue(String.class),
                                         aChild.child("lName").getValue(String.class),
                                         aChild.child("country").getValue(String.class),
                                         aChild.child("state").getValue(String.class),
                                         aChild.child("pp_path").getValue(String.class)
-
                                 );
                                 userList.add(user);
                             }
-
-
                             }
-
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
                         }
                     });
         return userList;
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,6 +18,12 @@
             android:layout_width="65dp"
             android:layout_height="73dp"
             android:src="@drawable/ic_profile_male" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/thumbnailChatItem_imageURI"
+            android:visibility="gone"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -55,19 +61,9 @@
         app:layout_constraintStart_toEndOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/fullNameChatItem" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hiddenImageURI_ChatItem"
-        android:visibility="gone"
-        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hiddenUserID_ChatItem"
-        android:visibility="gone"
-        />
+
+
 
     <TextView
         android:id="@+id/lastAccessedDate"
@@ -84,3 +80,19 @@
         app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

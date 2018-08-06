@@ -1,5 +1,4 @@
 package com.example.suresh.mychattapplication.Controllers;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,7 +15,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.example.suresh.mychattapplication.Models.FirebaseDAO;
 import com.example.suresh.mychattapplication.Models.Services.DeviceTokenService;
 import com.example.suresh.mychattapplication.Models.User;
@@ -28,20 +26,15 @@ import com.google.firebase.auth.AuthResult;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,CommonActivity{
 
     private ActionBar actionBar; //this is required to remove action bar
-
     private Button btnLogin;
     private TextView txtSignUp;
     private TextInputEditText email;
     private TextInputEditText pword;
     private boolean flag;
-
     private FirebaseDAO firebaseDAO;
-
     private View pbar;
     private View mainView;
-
     private User user;
-
 
     @Override
     public void initializeViews() {
@@ -62,18 +55,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         catch (Exception e){
                 Log.e("ERROR",e.getMessage());
         }
-
-
     }
-
 
     //function for validating username and password fields
     @Override
     public boolean validateFields() {
-
         try{
         if(TextUtils.isEmpty(email.getText())){
-            email.setError("username is required");
+            email.setError("email is required");
             return false;
         }
         else if(!email.getText().toString().contains("@")){
@@ -114,51 +103,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonLogin:
 
                 if(validateFields()) {
-
-                    btnLogin.setTextColor(Color.WHITE);
-                    btnLogin.setBackgroundResource(R.drawable.clicked_button);
                     mainView.setVisibility(View.GONE);
                     pbar.setVisibility(View.VISIBLE);
-
 
                     new AsyncTask<String, Void, Boolean>() {
                         @Override
                         protected Boolean doInBackground(String... strings) {
 
                             firebaseDAO = FirebaseDAO.getFirebaseDAOObject();
-
-
-
                             firebaseDAO.getAuthenticationObject()
                                     .signInWithEmailAndPassword(strings[0],strings[1])
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
                                             if (task.isSuccessful()) {
-
                                                 String token=(new DeviceTokenService()).getRefreshedToken();
-
                                                 firebaseDAO.saveDeviceTokens(
                                                         getApplicationContext(),
                                                         firebaseDAO.getAuthenticationObject().getCurrentUser().getUid(),
                                                         token
                                                 );
 
-
-                                                FirebaseDAO.UID=firebaseDAO.getAuthenticationObject().getCurrentUser().getUid();
-
-                                                firebaseDAO.getDbReference()
+                                        FirebaseDAO.UID=firebaseDAO.getAuthenticationObject().getCurrentUser().getUid();
+                                        firebaseDAO.getDbReference()
                                                         .child("users")
                                                         .child(FirebaseDAO.UID)
                                                         .child("online")
                                                         .addValueEventListener(FirebaseDAO.valueEventListener);
 
-
-                                                Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                                                i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
-                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(i);
-                                                finish();
+                            Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                            i.putExtra("UID",firebaseDAO.getAuthenticationObject().getCurrentUser().getUid());
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
                                             }
                                             else {
                                                 mainView.setVisibility(View.VISIBLE);
@@ -170,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             }
                                         }
                                     });
-                            return flag;
+                            return true;
                         }
 
                         @Override
@@ -189,7 +166,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }}
 
-    }
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
