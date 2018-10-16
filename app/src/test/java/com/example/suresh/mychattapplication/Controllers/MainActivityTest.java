@@ -1,6 +1,6 @@
 package com.example.suresh.mychattapplication.Controllers;
 
-import org.junit.Test;
+import org.junit.Test.*;
 
 import static org.junit.Assert.*;
 
